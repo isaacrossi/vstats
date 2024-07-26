@@ -20,6 +20,9 @@ export default {
       colors: {
         "blue-1000": "#0D1326",
       },
+      backgroundImage: {
+        "blue-diagonal": "url('assets/blue-diagonal.jpg')",
+      },
     },
   },
   plugins: [],
