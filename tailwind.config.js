@@ -22,6 +22,8 @@ export default {
       },
       backgroundImage: {
         "blue-diagonal": "url('assets/blue-diagonal.jpg')",
+        "search-icon": "url('assets/search.svg')",
+        "down-icon": "url('assets/down.svg')",
       },
     },
   },

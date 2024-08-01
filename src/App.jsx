@@ -1,3 +1,6 @@
+import { Dropdown } from "./components/Dropdown";
+import { useState } from "react";
+
 const players = [
   {
     name: "Jack Clisby",
@@ -13,7 +16,27 @@ const players = [
   },
 ];
 
+const teams = [
+  {
+    id: 1,
+    name: "Wanderers",
+    imageUrl: "src/assets/wanderers.svg",
+  },
+  {
+    id: 2,
+    name: "Victory",
+    imageUrl: "src/assets/wanderers.svg",
+  },
+];
+
 function App() {
+  const [selectedTeamId, setSelectedTeamId] = useState(null);
+
+  const handleSelect = (id) => {
+    setSelectedTeamId(id);
+    console.log(`Selected team ID: ${id}`);
+  };
+
   return (
     <div className="bg-blue-1000">
       <div className="container mx-auto">
@@ -31,22 +54,22 @@ function App() {
                 id="search"
                 type="text"
                 placeholder="Search for a player"
+                className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
               />
             </form>
 
-            <form>
-              <label htmlFor="teams" className="sr-only">
-                Teams
-              </label>
-              <select name="teams" id="teams">
-                <option value="all teams">All Teams</option>
-                <option value="wanderers">Wanderers</option>
-              </select>
-            </form>
+            <Dropdown
+              id="team-dropdown"
+              title="All teams"
+              data={teams}
+              hasImage={true}
+              selectedId={selectedTeamId}
+              onSelect={handleSelect}
+            />
           </div>
         </header>
 
-        <hr />
+        <hr className="border-slate-600" />
       </div>
     </div>
   );
