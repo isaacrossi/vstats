@@ -3,12 +3,14 @@ import { useState } from "react";
 
 const players = [
   {
+    id: 1,
     name: "Jack Clisby",
     team: "Western Sydney Wanderers",
     country: "Australia",
     role: "defender",
   },
   {
+    id: 2,
     name: "Keanu Baccus",
     team: "Western Sydney Wanderers",
     country: "Australia",
@@ -29,7 +31,7 @@ const teams = [
   },
 ];
 
-function App() {
+const App = () => {
   const [selectedTeamId, setSelectedTeamId] = useState(null);
 
   const handleSelect = (id) => {
@@ -46,18 +48,7 @@ function App() {
           </h1>
 
           <div className="flex flex-col">
-            <form className="mb-6">
-              <label htmlFor="search" className="sr-only">
-                Search
-              </label>
-              <input
-                id="search"
-                type="text"
-                placeholder="Search for a player"
-                className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
-              />
-            </form>
-
+            <Search />
             <Dropdown
               id="team-dropdown"
               title="All teams"
@@ -68,11 +59,45 @@ function App() {
             />
           </div>
         </header>
-
         <hr className="border-slate-600" />
+        <List />
       </div>
     </div>
   );
-}
+};
+
+const List = () => (
+  <ul>
+    {players.map((player) => (
+      <li key={player.id}>
+        <span>{player.name}</span>
+        <span>{player.team}</span>
+        <span>{player.country}</span>
+        <span>{player.role}</span>
+      </li>
+    ))}
+  </ul>
+);
+
+const Search = () => {
+  const handleChange = (event) => {
+    console.log(event);
+    console.log(event.target.value);
+  };
+  return (
+    <form className="mb-6">
+      <label htmlFor="search" className="sr-only">
+        Search
+      </label>
+      <input
+        id="search"
+        type="text"
+        onChange={handleChange}
+        placeholder="Search for a player"
+        className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
+      />
+    </form>
+  );
+};
 
 export default App;
