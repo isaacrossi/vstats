@@ -88,20 +88,4 @@ const Dropdown = ({
   );
 };
 
-Dropdown.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      name: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string,
-    })
-  ).isRequired,
-  hasImage: PropTypes.bool,
-  style: PropTypes.object,
-  selectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onSelect: PropTypes.func,
-};
-
 export { Dropdown };

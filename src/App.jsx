@@ -60,29 +60,17 @@ const App = () => {
           </div>
         </header>
         <hr className="border-slate-600" />
-        <List />
+        <List list={players} />
       </div>
     </div>
   );
 };
 
-const List = () => (
-  <ul>
-    {players.map((player) => (
-      <li key={player.id}>
-        <span>{player.name}</span>
-        <span>{player.team}</span>
-        <span>{player.country}</span>
-        <span>{player.role}</span>
-      </li>
-    ))}
-  </ul>
-);
-
 const Search = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleChange = (event) => {
-    console.log(event);
-    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <form className="mb-6">
@@ -92,6 +80,7 @@ const Search = () => {
       <input
         id="search"
         type="text"
+        value={searchTerm}
         onChange={handleChange}
         placeholder="Search for a player"
         className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
@@ -99,5 +88,22 @@ const Search = () => {
     </form>
   );
 };
+
+const List = ({ list }) => (
+  <ul>
+    {list.map((item) => (
+      <Item key={item.id} item={item} />
+    ))}
+  </ul>
+);
+
+const Item = ({ item }) => (
+  <li className="grid grid-cols-4  text-slate-50">
+    <span>{item.name}</span>
+    <span>{item.team}</span>
+    <span>{item.country}</span>
+    <span>{item.role}</span>
+  </li>
+);
 
 export default App;
