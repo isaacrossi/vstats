@@ -59,7 +59,12 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <Search search={searchTerm} onSearch={handleSearch} />
+            <InputWithLabel
+              id="search"
+              label="Search"
+              value={searchTerm}
+              onInputChange={handleSearch}
+            />
             <Dropdown
               id="team-dropdown"
               title="All teams"
@@ -77,16 +82,17 @@ const App = () => {
   );
 };
 
-const Search = ({ onSearch, search }) => (
+const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
   <form className="mb-6">
-    <label htmlFor="search" className="sr-only">
-      Search
+    <label htmlFor={id} className="sr-only">
+      {label}
     </label>
+    &nbsp;
     <input
-      id="search"
-      type="text"
-      value={search}
-      onChange={onSearch}
+      id={id}
+      type={type}
+      value={value}
+      onChange={onInputChange}
       placeholder="Search for a player"
       className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
     />
