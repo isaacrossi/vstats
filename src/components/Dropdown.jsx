@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import useOutsideClick from "../hooks/useOutsideClick";
 import { GoChevronDown } from "react-icons/go";
 

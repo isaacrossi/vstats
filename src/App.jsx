@@ -1,23 +1,6 @@
 import { Dropdown } from "./components/Dropdown";
 import { useState } from "react";
 
-const players = [
-  {
-    id: 1,
-    name: "Jack Clisby",
-    team: "Western Sydney Wanderers",
-    country: "Australia",
-    role: "defender",
-  },
-  {
-    id: 2,
-    name: "Keanu Baccus",
-    team: "Western Sydney Wanderers",
-    country: "Australia",
-    role: "midfielder",
-  },
-];
-
 const teams = [
   {
     id: 1,
@@ -32,12 +15,39 @@ const teams = [
 ];
 
 const App = () => {
+  const players = [
+    {
+      id: 1,
+      name: "Jack Clisby",
+      team: "Western Sydney Wanderers",
+      country: "Australia",
+      role: "defender",
+    },
+    {
+      id: 2,
+      name: "Keanu Baccus",
+      team: "Western Sydney Wanderers",
+      country: "Australia",
+      role: "midfielder",
+    },
+  ];
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [selectedTeamId, setSelectedTeamId] = useState(null);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   const handleSelect = (id) => {
     setSelectedTeamId(id);
     console.log(`Selected team ID: ${id}`);
   };
+
+  const searchedPlayers = players.filter((player) =>
+    player.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="bg-blue-1000">
@@ -48,7 +58,7 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <Search />
+            <Search onSearch={handleSearch} />
             <Dropdown
               id="team-dropdown"
               title="All teams"
@@ -60,34 +70,26 @@ const App = () => {
           </div>
         </header>
         <hr className="border-slate-600" />
-        <List list={players} />
+        <List list={searchedPlayers} />
       </div>
     </div>
   );
 };
 
-const Search = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-  return (
-    <form className="mb-6">
-      <label htmlFor="search" className="sr-only">
-        Search
-      </label>
-      <input
-        id="search"
-        type="text"
-        value={searchTerm}
-        onChange={handleChange}
-        placeholder="Search for a player"
-        className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
-      />
-    </form>
-  );
-};
+const Search = ({ onSearch }) => (
+  <form className="mb-6">
+    <label htmlFor="search" className="sr-only">
+      Search
+    </label>
+    <input
+      id="search"
+      type="text"
+      onChange={onSearch}
+      placeholder="Search for a player"
+      className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
+    />
+  </form>
+);
 
 const List = ({ list }) => (
   <ul>
