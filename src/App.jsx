@@ -1,4 +1,5 @@
-import { Dropdown } from "./components/Dropdown";
+import Dropdown from "./components/Dropdown";
+import useStorageState from "./hooks/useStorageState";
 import { useState } from "react";
 
 const teams = [
@@ -32,17 +33,17 @@ const App = () => {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
   const [selectedTeamId, setSelectedTeamId] = useState(null);
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
   const handleSelect = (id) => {
     setSelectedTeamId(id);
     console.log(`Selected team ID: ${id}`);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
   };
 
   const searchedPlayers = players.filter((player) =>
@@ -58,7 +59,7 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <Search onSearch={handleSearch} />
+            <Search search={searchTerm} onSearch={handleSearch} />
             <Dropdown
               id="team-dropdown"
               title="All teams"
@@ -76,7 +77,7 @@ const App = () => {
   );
 };
 
-const Search = ({ onSearch }) => (
+const Search = ({ onSearch, search }) => (
   <form className="mb-6">
     <label htmlFor="search" className="sr-only">
       Search
@@ -84,6 +85,7 @@ const Search = ({ onSearch }) => (
     <input
       id="search"
       type="text"
+      value={search}
       onChange={onSearch}
       placeholder="Search for a player"
       className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"

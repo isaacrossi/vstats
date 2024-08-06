@@ -87,4 +87,4 @@ const Dropdown = ({
   );
 };
 
-export { Dropdown };
+export default Dropdown;
