@@ -1,6 +1,6 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const teams = [
   {
@@ -16,7 +16,7 @@ const teams = [
 ];
 
 const App = () => {
-  const players = [
+  const initialPlayers = [
     {
       id: 1,
       name: "Jack Clisby",
@@ -46,6 +46,27 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
+  const [players, setPlayers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const getAsyncPlayers = () =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ data: { players: initialPlayers } });
+      }, 2000);
+    });
+
+  useEffect(() => {
+    setIsLoading(true);
+    getAsyncPlayers()
+      .then((result) => {
+        setPlayers(result.data.players);
+        setIsLoading(false);
+      })
+      .catch(() => setIsError(true));
+  }, []);
+
   const searchedPlayers = players.filter((player) =>
     player.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -64,7 +85,9 @@ const App = () => {
               label="Search"
               value={searchTerm}
               onInputChange={handleSearch}
-            />
+            >
+              Search
+            </InputWithLabel>
             <Dropdown
               id="team-dropdown"
               title="All teams"
@@ -76,22 +99,35 @@ const App = () => {
           </div>
         </header>
         <hr className="border-slate-600" />
-        <List list={searchedPlayers} />
+        {isError && <p className="text-slate-50">Something went wrong...</p>}
+        {isLoading ? (
+          <p className="text-slate-50">Loading....</p>
+        ) : (
+          <List list={searchedPlayers} />
+        )}
       </div>
     </div>
   );
 };
 
-const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
+const InputWithLabel = ({
+  id,
+  value,
+  type = "text",
+  onInputChange,
+  isFocused,
+  children,
+}) => (
   <form className="mb-6">
     <label htmlFor={id} className="sr-only">
-      {label}
+      {children}
     </label>
     &nbsp;
     <input
       id={id}
       type={type}
       value={value}
+      autoFocus={isFocused}
       onChange={onInputChange}
       placeholder="Search for a player"
       className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
