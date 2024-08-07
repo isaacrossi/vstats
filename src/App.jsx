@@ -1,6 +1,6 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 const teams = [
   {
@@ -15,24 +15,57 @@ const teams = [
   },
 ];
 
-const App = () => {
-  const initialPlayers = [
-    {
-      id: 1,
-      name: "Jack Clisby",
-      team: "Western Sydney Wanderers",
-      country: "Australia",
-      role: "defender",
-    },
-    {
-      id: 2,
-      name: "Keanu Baccus",
-      team: "Western Sydney Wanderers",
-      country: "Australia",
-      role: "midfielder",
-    },
-  ];
+const initialPlayers = [
+  {
+    id: 1,
+    name: "Jack Clisby",
+    team: "Western Sydney Wanderers",
+    country: "Australia",
+    role: "defender",
+  },
+  {
+    id: 2,
+    name: "Keanu Baccus",
+    team: "Western Sydney Wanderers",
+    country: "Australia",
+    role: "midfielder",
+  },
+];
 
+const getAsyncPlayers = () =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: { players: initialPlayers } });
+    }, 2000);
+  });
+
+const playersReducer = (state, action) => {
+  switch (action.type) {
+    case "PLAYERS_FETCH_INIT":
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case "PLAYERS_FETCH_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload,
+      };
+    case "PLAYERS_FETCH_FAILURE":
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    default:
+      throw new Error();
+  }
+};
+
+const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
   const [selectedTeamId, setSelectedTeamId] = useState(null);
@@ -46,28 +79,25 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const [players, setPlayers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  const getAsyncPlayers = () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ data: { players: initialPlayers } });
-      }, 2000);
-    });
+  const [players, dispatchPlayers] = useReducer(playersReducer, {
+    data: [],
+    isLoading: false,
+    isError: false,
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
     getAsyncPlayers()
       .then((result) => {
-        setPlayers(result.data.players);
-        setIsLoading(false);
+        dispatchPlayers({
+          type: "PLAYERS_FETCH_SUCCESS",
+          payload: result.data.players,
+        });
       })
-      .catch(() => setIsError(true));
+      .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, []);
 
-  const searchedPlayers = players.filter((player) =>
+  const searchedPlayers = players.data.filter((player) =>
     player.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -99,8 +129,10 @@ const App = () => {
           </div>
         </header>
         <hr className="border-slate-600" />
-        {isError && <p className="text-slate-50">Something went wrong...</p>}
-        {isLoading ? (
+        {players.isError && (
+          <p className="text-slate-50">Something went wrong...</p>
+        )}
+        {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
           <List list={searchedPlayers} />
