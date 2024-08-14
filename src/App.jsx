@@ -15,30 +15,6 @@ const teams = [
   },
 ];
 
-const initialPlayers = [
-  {
-    id: 1,
-    name: "Jack Clisby",
-    team: "Western Sydney Wanderers",
-    country: "Australia",
-    role: "defender",
-  },
-  {
-    id: 2,
-    name: "Keanu Baccus",
-    team: "Western Sydney Wanderers",
-    country: "Australia",
-    role: "midfielder",
-  },
-];
-
-const getAsyncPlayers = () =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: { players: initialPlayers } });
-    }, 2000);
-  });
-
 const playersReducer = (state, action) => {
   switch (action.type) {
     case "PLAYERS_FETCH_INIT":
@@ -65,6 +41,32 @@ const playersReducer = (state, action) => {
   }
 };
 
+const getPlayers = async () => {
+  const url =
+    "https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024";
+  const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": import.meta.env.VITE_API_KEY,
+      "x-rapidapi-host": import.meta.env.VITE_API_HOST,
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("from getPlayers func", result);
+    return result;
+  } catch (error) {
+    console.error(error.message);
+    return { response: [] };
+  }
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
@@ -87,19 +89,22 @@ const App = () => {
 
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getAsyncPlayers()
+    getPlayers()
       .then((result) => {
+        console.log("Data before dispatch", result.response);
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
-          payload: result.data.players,
+          payload: result.response,
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, []);
 
-  const searchedPlayers = players.data.filter((player) =>
-    player.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const searchedPlayers = players.data.filter((player) =>
+  //   player.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  console.log("players.data", players.data);
 
   return (
     <div className="bg-blue-1000">
@@ -135,7 +140,7 @@ const App = () => {
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <List list={searchedPlayers} />
+          <List list={players.data} />
         )}
       </div>
     </div>
@@ -170,17 +175,17 @@ const InputWithLabel = ({
 const List = ({ list }) => (
   <ul>
     {list.map((item) => (
-      <Item key={item.id} item={item} />
+      <Item key={item.player.id} item={item} />
     ))}
   </ul>
 );
 
 const Item = ({ item }) => (
   <li className="grid grid-cols-4  text-slate-50">
-    <span>{item.name}</span>
-    <span>{item.team}</span>
-    <span>{item.country}</span>
-    <span>{item.role}</span>
+    <span>{item.player.name}</span>
+    <span>{item.statistics[0].games.position}</span>
+    <span>{item.player.nationality}</span>
+    <span>{item.statistics[0].team.name}</span>
   </li>
 );
 
