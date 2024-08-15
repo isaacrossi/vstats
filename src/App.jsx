@@ -1,6 +1,7 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
 import { useEffect, useReducer, useState } from "react";
+import { countries } from "./data/countries";
 
 const teams = [
   {
@@ -67,6 +68,11 @@ const getPlayers = async () => {
   }
 };
 
+function shortenTeamName(teamName) {
+  const words = teamName.split(" ");
+  return words.length > 2 ? words.slice(0, 2).join(" ") : teamName;
+}
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
@@ -100,9 +106,9 @@ const App = () => {
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, []);
 
-  // const searchedPlayers = players.data.filter((player) =>
-  //   player.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const searchedPlayers = players.data.filter((player) =>
+    player.player.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   console.log("players.data", players.data);
 
@@ -140,7 +146,7 @@ const App = () => {
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <List list={players.data} />
+          <List list={searchedPlayers} />
         )}
       </div>
     </div>
@@ -181,11 +187,27 @@ const List = ({ list }) => (
 );
 
 const Item = ({ item }) => (
-  <li className="grid grid-cols-4  text-slate-50">
+  <li className="grid grid-cols-4 text-s uppercase text-slate-50 px-5 py-4 border-b border-red-600">
     <span>{item.player.name}</span>
+    <span className="flex">
+      <img
+        className="w-6 h-6 mr-2"
+        src={item.statistics[0].team.logo}
+        alt={item.statistics[0].team.name + "logo"}
+      />
+      {shortenTeamName(item.statistics[0].team.name)}
+    </span>
+    <span className="flex">
+      <img
+        className="h-5 w-auto mr-2"
+        src={`https://flagsapi.com/${
+          countries[item.player.nationality]
+        }/flat/64.png`}
+        alt="country flag"
+      />
+      {item.player.nationality}
+    </span>
     <span>{item.statistics[0].games.position}</span>
-    <span>{item.player.nationality}</span>
-    <span>{item.statistics[0].team.name}</span>
   </li>
 );
 
