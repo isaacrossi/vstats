@@ -2,19 +2,7 @@ import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
 import { useEffect, useReducer, useState } from "react";
 import { countries } from "./data/countries";
-
-const teams = [
-  {
-    id: 1,
-    name: "Wanderers",
-    imageUrl: "src/assets/wanderers.svg",
-  },
-  {
-    id: 2,
-    name: "Victory",
-    imageUrl: "src/assets/wanderers.svg",
-  },
-];
+import { teams } from "./data/teams";
 
 const playersReducer = (state, action) => {
   switch (action.type) {
@@ -76,12 +64,10 @@ function shortenTeamName(teamName) {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
-  const [selectedTeamId, setSelectedTeamId] = useState(null);
-
-  const handleSelect = (id) => {
-    setSelectedTeamId(id);
-    console.log(`Selected team ID: ${id}`);
-  };
+  // const handleSelect = (id) => {
+  //   setSelectedTeamId(id);
+  //   console.log(`Selected team ID: ${id}`);
+  // };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -134,8 +120,6 @@ const App = () => {
               title="All teams"
               data={teams}
               hasImage={true}
-              selectedId={selectedTeamId}
-              onSelect={handleSelect}
             />
           </div>
         </header>

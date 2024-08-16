@@ -2,33 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
 import { GoChevronDown } from "react-icons/go";
 
-const Dropdown = ({
-  id,
-  title = "select",
-  data,
-  hasImage,
-  selectedId,
-  onSelect,
-}) => {
+const Dropdown = ({ id, title = "select", data, hasImage }) => {
   const [isOpen, setIsopen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(
-    selectedId ? data?.find((item) => item.id === selectedId) : undefined
-  );
+  const [selectedItemId, setSelectedItemId] = useState(null);
+
+  const selectedItem = selectedItemId
+    ? data?.find((item) => item.id === selectedItemId)
+    : undefined;
 
   const handleChange = (item) => {
-    setSelectedItem(item); //update the selectedItem state with the selected item
-    onSelect && onSelect(item.id); // Call onSelect prop function with the selected item's id/ *this is a shorthand for if(onSelect) { onSelect(item.id) }
-    setIsopen(false); //close the dropdown
+    setSelectedItemId(item.id);
+    setIsopen(false);
   };
 
   useEffect(() => {
-    if (selectedId && data) {
-      const newSelectedItem = data.find((item) => item.id === selectedId);
-      newSelectedItem && setSelectedItem(newSelectedItem);
-    } else {
-      setSelectedItem(undefined);
+    if (selectedItemId && data) {
+      const newSelectedItem = data.find((item) => item.id === selectedItemId);
+      if (!newSelectedItem) {
+        setSelectedItemId(null);
+      }
     }
-  }, [selectedId, data]);
+  }, [selectedItemId, data]);
 
   const dropdownRef = useRef(null);
   useOutsideClick({
@@ -37,7 +31,7 @@ const Dropdown = ({
   });
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={dropdownRef} className="relative w-64">
       <button
         id={id}
         aria-label="Toggle dropdown"
