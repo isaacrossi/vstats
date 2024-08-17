@@ -30,9 +30,10 @@ const playersReducer = (state, action) => {
   }
 };
 
-const getPlayers = async () => {
-  const url =
-    "https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024";
+const getPlayers = async (searchTerm) => {
+  const url = searchTerm
+    ? `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024&search=${searchTerm}`
+    : `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024`;
   const options = {
     method: "GET",
     headers: {
@@ -64,11 +65,6 @@ function shortenTeamName(teamName) {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
-  // const handleSelect = (id) => {
-  //   setSelectedTeamId(id);
-  //   console.log(`Selected team ID: ${id}`);
-  // };
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -81,7 +77,7 @@ const App = () => {
 
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getPlayers()
+    getPlayers(searchTerm)
       .then((result) => {
         console.log("Data before dispatch", result.response);
         dispatchPlayers({
@@ -90,13 +86,7 @@ const App = () => {
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
-  }, []);
-
-  const searchedPlayers = players.data.filter((player) =>
-    player.player.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  console.log("players.data", players.data);
+  }, [searchTerm]);
 
   return (
     <div className="bg-blue-1000">
@@ -130,7 +120,7 @@ const App = () => {
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <List list={searchedPlayers} />
+          <List list={players.data} />
         )}
       </div>
     </div>
