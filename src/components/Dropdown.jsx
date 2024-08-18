@@ -1,23 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
 import { GoChevronDown } from "react-icons/go";
+import { shortenTeamName } from "../utils/shortenTeamName";
 
-const Dropdown = ({ id, title = "select", data, hasImage }) => {
+const Dropdown = ({
+  id,
+  title = "select",
+  data,
+  hasImage,
+  category,
+  imgKey,
+}) => {
   const [isOpen, setIsopen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
   const selectedItem = selectedItemId
-    ? data?.find((item) => item.id === selectedItemId)
+    ? data?.find((item) => item[category]?.id === selectedItemId)
     : undefined;
 
   const handleChange = (item) => {
-    setSelectedItemId(item.id);
+    setSelectedItemId(item[category]?.id);
     setIsopen(false);
   };
 
   useEffect(() => {
     if (selectedItemId && data) {
-      const newSelectedItem = data.find((item) => item.id === selectedItemId);
+      const newSelectedItem = data?.find(
+        (item) => item[category]?.id === selectedItemId
+      );
+      console.log(newSelectedItem);
       if (!newSelectedItem) {
         setSelectedItemId(null);
       }
@@ -41,7 +52,13 @@ const Dropdown = ({ id, title = "select", data, hasImage }) => {
         onClick={() => setIsopen(!isOpen)}
         className="flex align-center justify-between w-64 py-2 bg-transparent border-b border-red-600 text-slate-50"
       >
-        <span>{selectedItem?.name || title}</span>
+        <span className="flex">
+          <img
+            className="mr-2 h-6 w-6"
+            src={selectedItem?.[category]?.[imgKey] || ""}
+          />
+          {shortenTeamName(selectedItem?.[category]?.name || title)}
+        </span>
         <GoChevronDown
           size={20}
           className={`transform duration-500 ease-in-out text-red-600 ${
@@ -57,21 +74,21 @@ const Dropdown = ({ id, title = "select", data, hasImage }) => {
             aria-labelledby={id}
             aria-orientation="vertical"
           >
-            {data.map((item) => (
+            {data?.map((item) => (
               <li
                 className="flex items-center px-4 py-2 text-slate-50 hover:text-red-600 cursor-pointer"
-                key={item.id}
+                key={item?.[category]?.id}
                 onClick={() => handleChange(item)}
               >
                 {hasImage && (
                   <img
-                    className="mr-2"
-                    src={item.imageUrl}
+                    className="mr-2 h-6 w-6"
+                    src={item?.[category]?.[imgKey] || ""}
                     alt="team"
                     loading="lazy"
                   />
                 )}
-                <span>{item.name}</span>
+                <span>{shortenTeamName(item?.[category]?.name) ?? title}</span>
               </li>
             ))}
           </ul>

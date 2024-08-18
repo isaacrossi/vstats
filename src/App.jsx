@@ -1,25 +1,64 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { countries } from "./data/countries";
-import { teams } from "./data/teams";
+import { apiOptions } from "./config/apiOptions";
+import { shortenTeamName } from "./utils/shortenTeamName";
 
-const playersReducer = (state, action) => {
+const getTeams = async () => {
+  const url =
+    "https://api-football-v1.p.rapidapi.com/v3/teams?league=188&season=2024";
+
+  try {
+    const response = await fetch(url, apiOptions);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("from getTeams func", result);
+    return result;
+  } catch (error) {
+    console.error(error.message);
+    return { response: [] };
+  }
+};
+
+const getPlayers = async (searchTerm) => {
+  const url = searchTerm
+    ? `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024&search=${searchTerm}`
+    : `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024`;
+
+  try {
+    const response = await fetch(url, apiOptions);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error.message);
+    return { response: [] };
+  }
+};
+
+export const playersReducer = (state, action) => {
   switch (action.type) {
-    case "PLAYERS_FETCH_INIT":
+    case `PLAYERS_FETCH_INIT`:
       return {
         ...state,
         isLoading: true,
         isError: false,
       };
-    case "PLAYERS_FETCH_SUCCESS":
+    case `PLAYERS_FETCH_SUCCESS`:
       return {
         ...state,
         isLoading: false,
         isError: false,
         data: action.payload,
       };
-    case "PLAYERS_FETCH_FAILURE":
+    case `PLAYERS_FETCH_FAILURE`:
       return {
         ...state,
         isLoading: false,
@@ -30,44 +69,8 @@ const playersReducer = (state, action) => {
   }
 };
 
-const getPlayers = async (searchTerm) => {
-  const url = searchTerm
-    ? `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024&search=${searchTerm}`
-    : `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024`;
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": import.meta.env.VITE_API_KEY,
-      "x-rapidapi-host": import.meta.env.VITE_API_HOST,
-    },
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log("from getPlayers func", result);
-    return result;
-  } catch (error) {
-    console.error(error.message);
-    return { response: [] };
-  }
-};
-
-function shortenTeamName(teamName) {
-  const words = teamName.split(" ");
-  return words.length > 2 ? words.slice(0, 2).join(" ") : teamName;
-}
-
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -75,11 +78,16 @@ const App = () => {
     isError: false,
   });
 
+  const [teams, setTeams] = useStorageState("teams", []);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
     getPlayers(searchTerm)
       .then((result) => {
-        console.log("Data before dispatch", result.response);
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
           payload: result.response,
@@ -87,6 +95,14 @@ const App = () => {
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, [searchTerm]);
+
+  useEffect(() => {
+    getTeams()
+      .then((result) => {
+        setTeams(result.response);
+      })
+      .catch(() => console.log("Error fetching teams"));
+  }, []);
 
   return (
     <div className="bg-blue-1000">
@@ -110,6 +126,8 @@ const App = () => {
               title="All teams"
               data={teams}
               hasImage={true}
+              category="team"
+              imgKey="logo"
             />
           </div>
         </header>
