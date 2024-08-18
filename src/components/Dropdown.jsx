@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
 import { GoChevronDown } from "react-icons/go";
 import { shortenTeamName } from "../utils/shortenTeamName";
@@ -22,18 +22,6 @@ const Dropdown = ({
     setSelectedItemId(item[category]?.id);
     setIsopen(false);
   };
-
-  useEffect(() => {
-    if (selectedItemId && data) {
-      const newSelectedItem = data?.find(
-        (item) => item[category]?.id === selectedItemId
-      );
-      console.log(newSelectedItem);
-      if (!newSelectedItem) {
-        setSelectedItemId(null);
-      }
-    }
-  }, [selectedItemId, data]);
 
   const dropdownRef = useRef(null);
   useOutsideClick({

@@ -16,7 +16,6 @@ const getTeams = async () => {
     }
 
     const result = await response.json();
-    console.log("from getTeams func", result);
     return result;
   } catch (error) {
     console.error(error.message);
@@ -103,6 +102,8 @@ const App = () => {
       })
       .catch(() => console.log("Error fetching teams"));
   }, []);
+
+  console.log(teams);
 
   return (
     <div className="bg-blue-1000">
