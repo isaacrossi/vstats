@@ -98,12 +98,16 @@ const App = () => {
   useEffect(() => {
     getTeams()
       .then((result) => {
-        setTeams(result.response);
+        const allTeamsOption = {
+          team: {
+            id: "0",
+            name: "All Teams",
+          },
+        };
+        setTeams([allTeamsOption, ...result.response]);
       })
       .catch(() => console.log("Error fetching teams"));
   }, []);
-
-  console.log(teams);
 
   return (
     <div className="bg-blue-1000">
@@ -124,8 +128,8 @@ const App = () => {
             </InputWithLabel>
             <Dropdown
               id="team-dropdown"
-              title="All teams"
               data={teams}
+              title="All Teams"
               hasImage={true}
               category="team"
               imgKey="logo"
