@@ -1,16 +1,15 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
-import { useEffect, useReducer } from "react";
-import { countries } from "./data/countries";
+import { useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
-import { shortenTeamName } from "./utils/shortenTeamName";
+import { playersReducer } from "./reducers/playersReducer";
+import { List } from "./components/List";
+import { InputWithLabel } from "./components/InputWithLabel";
+import { TEAM_URL, getPlayerUrl } from "./config/apiUrls";
 
 const getTeams = async () => {
-  const url =
-    "https://api-football-v1.p.rapidapi.com/v3/teams?league=188&season=2024";
-
   try {
-    const response = await fetch(url, apiOptions);
+    const response = await fetch(TEAM_URL, apiOptions);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -23,13 +22,9 @@ const getTeams = async () => {
   }
 };
 
-const getPlayers = async (searchTerm) => {
-  const url = searchTerm
-    ? `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024&search=${searchTerm}`
-    : `https://api-football-v1.p.rapidapi.com/v3/players?league=188&season=2024`;
-
+const getPlayers = async (searchTerm, teamId) => {
   try {
-    const response = await fetch(url, apiOptions);
+    const response = await fetch(getPlayerUrl(searchTerm, teamId), apiOptions);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -39,37 +34,12 @@ const getPlayers = async (searchTerm) => {
   } catch (error) {
     console.error(error.message);
     return { response: [] };
-  }
-};
-
-export const playersReducer = (state, action) => {
-  switch (action.type) {
-    case `PLAYERS_FETCH_INIT`:
-      return {
-        ...state,
-        isLoading: true,
-        isError: false,
-      };
-    case `PLAYERS_FETCH_SUCCESS`:
-      return {
-        ...state,
-        isLoading: false,
-        isError: false,
-        data: action.payload,
-      };
-    case `PLAYERS_FETCH_FAILURE`:
-      return {
-        ...state,
-        isLoading: false,
-        isError: true,
-      };
-    default:
-      throw new Error();
   }
 };
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
+  const [teamId, setTeamId] = useState("");
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -77,15 +47,20 @@ const App = () => {
     isError: false,
   });
 
-  const [teams, setTeams] = useStorageState("teams", []);
+  const [teams, setTeams] = useState("teams", []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  const handleChange = (item) => {
+    setTeamId(item.team.id);
+    searchTerm && setSearchTerm("");
+  };
+
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getPlayers(searchTerm)
+    getPlayers(searchTerm, teamId)
       .then((result) => {
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
@@ -93,7 +68,7 @@ const App = () => {
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
-  }, [searchTerm]);
+  }, [searchTerm, teamId]);
 
   useEffect(() => {
     getTeams()
@@ -133,6 +108,7 @@ const App = () => {
               hasImage={true}
               category="team"
               imgKey="logo"
+              onChange={handleChange}
             />
           </div>
         </header>
@@ -149,63 +125,5 @@ const App = () => {
     </div>
   );
 };
-
-const InputWithLabel = ({
-  id,
-  value,
-  type = "text",
-  onInputChange,
-  isFocused,
-  children,
-}) => (
-  <form className="mb-6">
-    <label htmlFor={id} className="sr-only">
-      {children}
-    </label>
-    &nbsp;
-    <input
-      id={id}
-      type={type}
-      value={value}
-      autoFocus={isFocused}
-      onChange={onInputChange}
-      placeholder="Search for a player"
-      className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
-    />
-  </form>
-);
-
-const List = ({ list }) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.player.id} item={item} />
-    ))}
-  </ul>
-);
-
-const Item = ({ item }) => (
-  <li className="grid grid-cols-4 text-s uppercase text-slate-50 px-5 py-4 border-b border-red-600">
-    <span>{item.player.name}</span>
-    <span className="flex">
-      <img
-        className="w-6 h-6 mr-2"
-        src={item.statistics[0].team.logo}
-        alt={item.statistics[0].team.name + "logo"}
-      />
-      {shortenTeamName(item.statistics[0].team.name)}
-    </span>
-    <span className="flex">
-      <img
-        className="h-5 w-auto mr-2"
-        src={`https://flagsapi.com/${
-          countries[item.player.nationality]
-        }/flat/64.png`}
-        alt="country flag"
-      />
-      {item.player.nationality}
-    </span>
-    <span>{item.statistics[0].games.position}</span>
-  </li>
-);
 
 export default App;

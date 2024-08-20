@@ -12,9 +12,10 @@ const Dropdown = ({
   hasImage, // Boolean to determine if images should be displayed
   category, // Category key to access data
   imgKey, // Key to access image URL in data
+  onChange,
 }) => {
   // State to manage dropdown open/close status
-  const [isOpen, setIsopen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   // State to manage the selected item ID
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -33,7 +34,8 @@ const Dropdown = ({
   // Handle change of selected item
   const handleChange = (item) => {
     setSelectedItemId(item?.[category]?.id);
-    setIsopen(false);
+    setIsOpen(false);
+    onChange(item);
   };
 
   // Ref for the dropdown element
@@ -41,7 +43,7 @@ const Dropdown = ({
   // Use custom hook to handle outside click
   useOutsideClick({
     ref: dropdownRef,
-    handler: () => setIsopen(false),
+    handler: () => setIsOpen(false),
   });
 
   console.log(selectedItem); // Log the selected item for debugging
@@ -54,7 +56,7 @@ const Dropdown = ({
         aria-haspopup="true"
         aria-expanded={isOpen}
         type="button"
-        onClick={() => setIsopen(!isOpen)}
+        onClick={() => setIsOpen(!isOpen)}
         className="flex align-center justify-between w-64 py-2 bg-transparent border-b border-red-600 text-slate-50"
       >
         <span className="flex">
