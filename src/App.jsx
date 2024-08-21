@@ -5,22 +5,8 @@ import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
 import { List } from "./components/List";
 import { InputWithLabel } from "./components/InputWithLabel";
-import { TEAM_URL, getPlayerUrl } from "./config/apiUrls";
-
-const getTeams = async () => {
-  try {
-    const response = await fetch(TEAM_URL, apiOptions);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(error.message);
-    return { response: [] };
-  }
-};
+import { getPlayerUrl } from "./config/apiUrls";
+import { teams } from "./data/teams";
 
 const getPlayers = async (searchTerm, teamId) => {
   try {
@@ -39,6 +25,8 @@ const getPlayers = async (searchTerm, teamId) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
+
+  // team id is set in the dropdown component, it gives us team.id to use in the API call
   const [teamId, setTeamId] = useState("");
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
@@ -47,14 +35,12 @@ const App = () => {
     isError: false,
   });
 
-  const [teams, setTeams] = useState("teams", []);
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleChange = (item) => {
-    setTeamId(item.team.id);
+    setTeamId(item.id);
     searchTerm && setSearchTerm("");
   };
 
@@ -70,19 +56,7 @@ const App = () => {
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, [searchTerm, teamId]);
 
-  useEffect(() => {
-    getTeams()
-      .then((result) => {
-        const allTeamsOption = {
-          team: {
-            id: "0",
-            name: "All Teams",
-          },
-        };
-        setTeams([allTeamsOption, ...result.response]);
-      })
-      .catch(() => console.log("Error fetching teams"));
-  }, []);
+  console.log(teams);
 
   return (
     <div className="bg-blue-1000">
