@@ -8,9 +8,12 @@ import { InputWithLabel } from "./components/InputWithLabel";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 
-const getPlayers = async (searchTerm, teamId) => {
+const getPlayers = async (searchTerm, selectedTeamId) => {
   try {
-    const response = await fetch(getPlayerUrl(searchTerm, teamId), apiOptions);
+    const response = await fetch(
+      getPlayerUrl(searchTerm, selectedTeamId),
+      apiOptions
+    );
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -27,7 +30,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "");
 
   // team id is set in the dropdown component, it gives us team.id to use in the API call
-  const [teamId, setTeamId] = useState("");
+  const [selectedTeamId, setSelectedTeamId] = useState("0");
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -40,13 +43,13 @@ const App = () => {
   };
 
   const handleChange = (item) => {
-    setTeamId(item.id);
+    setSelectedTeamId(item.id);
     searchTerm && setSearchTerm("");
   };
 
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getPlayers(searchTerm, teamId)
+    getPlayers(searchTerm, selectedTeamId)
       .then((result) => {
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
@@ -54,7 +57,7 @@ const App = () => {
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
-  }, [searchTerm, teamId]);
+  }, [searchTerm, selectedTeamId]);
 
   console.log(teams);
 
@@ -79,6 +82,7 @@ const App = () => {
               id="team-dropdown"
               data={teams}
               title="All Teams"
+              selectedItemId={selectedTeamId}
               hasImage={true}
               category="team"
               imgKey="logo"

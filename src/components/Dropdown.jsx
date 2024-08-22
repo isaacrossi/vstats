@@ -9,20 +9,18 @@ const Dropdown = ({
   id, // ID for the dropdown button
   data, // Data to populate the dropdown
   title = "select", // Default title for the dropdown
+  selectedItemId,
   hasImage, // Boolean to determine if images should be displayed
   imgKey, // Key to access image URL in data
   onChange,
 }) => {
   // State to manage dropdown open/close status
   const [isOpen, setIsOpen] = useState(false);
-  // State to manage the selected item ID
-  const [selectedItemId, setSelectedItemId] = useState("0");
 
   const selectedItem = data.find((item) => item.id === selectedItemId);
 
   // Handle change of selected item
   const handleChange = (item) => {
-    setSelectedItemId(item?.id);
     setIsOpen(false);
     onChange(item);
   };
@@ -46,7 +44,7 @@ const Dropdown = ({
         aria-expanded={isOpen}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex align-center justify-between w-64 py-2 bg-transparent border-b border-red-600 text-slate-50"
+        className="flex align-center justify-between w-64 py-2 bg-blue-1000 border-b border-red-600 text-slate-50"
       >
         <span className="flex">
           {selectedItemId !== "0" && selectedItem && (

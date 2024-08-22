@@ -45,9 +45,9 @@ export const teams = [
     logo: "https://media.api-sports.io/football/teams/946.png",
   },
   {
-    id: "128",
+    id: "940",
     name: "Perth Glory",
-    logo: "https://media.api-sports.io/football/teams/128.png",
+    logo: "https://media.api-sports.io/football/teams/940.png",
   },
   {
     id: "943",
