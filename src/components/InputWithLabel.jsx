@@ -3,10 +3,11 @@ export const InputWithLabel = ({
   value,
   type = "text",
   onInputChange,
+  onSubmit,
   isFocused,
   children,
 }) => (
-  <form className="mb-6">
+  <form onSubmit={onSubmit} className="mb-6">
     <label htmlFor={id} className="sr-only">
       {children}
     </label>
@@ -17,6 +18,7 @@ export const InputWithLabel = ({
       value={value}
       autoFocus={isFocused}
       onChange={onInputChange}
+      autoComplete="off"
       placeholder="Search for a player"
       className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
     />

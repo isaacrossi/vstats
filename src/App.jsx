@@ -27,7 +27,11 @@ const getPlayers = async (searchTerm, selectedTeamId) => {
 };
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useStorageState("search", "");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useStorageState(
+    "search",
+    ""
+  );
 
   // team id is set in the dropdown component, it gives us team.id to use in the API call
   const [selectedTeamId, setSelectedTeamId] = useState("0");
@@ -38,18 +42,23 @@ const App = () => {
     isError: false,
   });
 
-  const handleSearch = (event) => {
+  const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleChange = (item) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSubmittedSearchTerm(searchTerm);
+  };
+
+  const handleDropdownChange = (item) => {
     setSelectedTeamId(item.id);
     searchTerm && setSearchTerm("");
   };
 
   useEffect(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getPlayers(searchTerm, selectedTeamId)
+    getPlayers(submittedSearchTerm, selectedTeamId)
       .then((result) => {
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
@@ -57,7 +66,7 @@ const App = () => {
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
-  }, [searchTerm, selectedTeamId]);
+  }, [submittedSearchTerm, selectedTeamId]);
 
   console.log(teams);
 
@@ -74,7 +83,8 @@ const App = () => {
               id="search"
               label="Search"
               value={searchTerm}
-              onInputChange={handleSearch}
+              onInputChange={handleInputChange}
+              onSubmit={handleSubmit}
             >
               Search
             </InputWithLabel>
@@ -86,7 +96,7 @@ const App = () => {
               hasImage={true}
               category="team"
               imgKey="logo"
-              onChange={handleChange}
+              onChange={handleDropdownChange}
             />
           </div>
         </header>
