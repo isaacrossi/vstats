@@ -1,6 +1,6 @@
 import Dropdown from "./components/Dropdown";
 import useStorageState from "./hooks/useStorageState";
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
 import { List } from "./components/List";
@@ -56,7 +56,7 @@ const App = () => {
     searchTerm && setSearchTerm("");
   };
 
-  useEffect(() => {
+  const handleFetchPlayers = useCallback(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
     getPlayers(submittedSearchTerm, selectedTeamId)
       .then((result) => {
@@ -67,6 +67,10 @@ const App = () => {
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, [submittedSearchTerm, selectedTeamId]);
+
+  useEffect(() => {
+    handleFetchPlayers();
+  }, [handleFetchPlayers]);
 
   console.log(teams);
 
