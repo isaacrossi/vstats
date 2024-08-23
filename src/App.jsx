@@ -48,6 +48,9 @@ const App = () => {
 
   const handleInputSubmit = (event) => {
     event.preventDefault();
+    if (searchTerm.length < 4) {
+      return;
+    }
     setSubmittedSearchTerm(searchTerm);
   };
 
@@ -83,15 +86,21 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <InputWithLabel
-              id="search"
-              label="Search"
-              value={searchTerm}
-              onInputChange={handleInputChange}
-              onSubmit={handleInputSubmit}
-            >
-              Search
-            </InputWithLabel>
+            <div className="relative max-w-80 h-auto">
+              <InputWithLabel
+                id="search"
+                label="Search"
+                value={searchTerm}
+                onInputChange={handleInputChange}
+                onSubmit={handleInputSubmit}
+              >
+                Search
+              </InputWithLabel>
+              <IconButton
+                onInputSubmit={handleInputSubmit}
+                searchTerm={searchTerm}
+              />
+            </div>
             <Dropdown
               id="team-dropdown"
               data={teams}
@@ -118,5 +127,14 @@ const App = () => {
     </div>
   );
 };
+
+const IconButton = ({ onInputSubmit, searchTerm }) => (
+  <button
+    type="button"
+    disabled={searchTerm.length < 4}
+    onClick={onInputSubmit}
+    className="absolute right-0 bottom-8 bg-search-icon bg-no-repeat bg-right bg-auto w-5 h-5"
+  />
+);
 
 export default App;

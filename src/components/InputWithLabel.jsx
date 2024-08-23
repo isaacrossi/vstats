@@ -19,8 +19,8 @@ export const InputWithLabel = ({
       autoFocus={isFocused}
       onChange={onInputChange}
       autoComplete="off"
-      placeholder="Search for a player"
-      className="w-64 py-2 bg-transparent border-b border-red-600 bg-search-icon bg-no-repeat bg-right bg-auto text-slate-50"
+      placeholder="Search must be at least 4 characters"
+      className="w-80 py-2 bg-transparent border-b border-red-600 text-slate-50"
     />
   </form>
 );
