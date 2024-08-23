@@ -27,9 +27,9 @@ const getPlayers = async (searchTerm, selectedTeamId) => {
 };
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useStorageState("search", "");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useStorageState(
-    "search",
+    "submitted search",
     ""
   );
 
@@ -46,7 +46,7 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleInputSubmit = (event) => {
     event.preventDefault();
     setSubmittedSearchTerm(searchTerm);
   };
@@ -84,7 +84,7 @@ const App = () => {
               label="Search"
               value={searchTerm}
               onInputChange={handleInputChange}
-              onSubmit={handleSubmit}
+              onSubmit={handleInputSubmit}
             >
               Search
             </InputWithLabel>
@@ -97,6 +97,7 @@ const App = () => {
               category="team"
               imgKey="logo"
               onChange={handleDropdownChange}
+              submittedSearchTerm={submittedSearchTerm}
             />
           </div>
         </header>
