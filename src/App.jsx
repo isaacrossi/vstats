@@ -6,6 +6,7 @@ import { List } from "./components/List";
 import { InputWithLabel } from "./components/InputWithLabel";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
+import axios from "axios";
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,9 +27,6 @@ const App = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    if (searchTerm.length < 4) {
-      return;
-    }
     setSubmittedSearchTerm(searchTerm);
   };
 
@@ -38,25 +36,28 @@ const App = () => {
   };
 
   const handleFetchPlayers = useCallback(() => {
+    if (searchTerm.length > 0 && searchTerm.length < 4) {
+      return;
+    }
+
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
 
-    fetch(getPlayerUrl(submittedSearchTerm, selectedTeamId), apiOptions)
+    axios
+      .get(getPlayerUrl(submittedSearchTerm, selectedTeamId), apiOptions)
       // getPlayers(submittedSearchTerm, selectedTeamId)
-      .then((response) => response.json())
       .then((result) => {
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
-          payload: result.response,
+          payload: result.data.response,
         });
       })
       .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
   }, [submittedSearchTerm, selectedTeamId]);
 
+  console.log("players", players.data);
   useEffect(() => {
     handleFetchPlayers();
   }, [handleFetchPlayers]);
-
-  console.log(teams);
 
   return (
     <div className="bg-blue-1000">
