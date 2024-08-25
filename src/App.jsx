@@ -1,5 +1,4 @@
 import Dropdown from "./components/Dropdown";
-import useStorageState from "./hooks/useStorageState";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
@@ -8,30 +7,9 @@ import { InputWithLabel } from "./components/InputWithLabel";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 
-const getPlayers = async (searchTerm, selectedTeamId) => {
-  try {
-    const response = await fetch(
-      getPlayerUrl(searchTerm, selectedTeamId),
-      apiOptions
-    );
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(error.message);
-    return { response: [] };
-  }
-};
-
 const App = () => {
-  const [searchTerm, setSearchTerm] = useStorageState("search", "");
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useStorageState(
-    "submitted search",
-    ""
-  );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
 
   // team id is set in the dropdown component, it gives us team.id to use in the API call
   const [selectedTeamId, setSelectedTeamId] = useState("0");
@@ -42,11 +20,11 @@ const App = () => {
     isError: false,
   });
 
-  const handleInputChange = (event) => {
+  const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleInputSubmit = (event) => {
+  const handleSearchSubmit = (event) => {
     event.preventDefault();
     if (searchTerm.length < 4) {
       return;
@@ -61,7 +39,10 @@ const App = () => {
 
   const handleFetchPlayers = useCallback(() => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-    getPlayers(submittedSearchTerm, selectedTeamId)
+
+    fetch(getPlayerUrl(submittedSearchTerm, selectedTeamId), apiOptions)
+      // getPlayers(submittedSearchTerm, selectedTeamId)
+      .then((response) => response.json())
       .then((result) => {
         dispatchPlayers({
           type: "PLAYERS_FETCH_SUCCESS",
@@ -91,13 +72,13 @@ const App = () => {
                 id="search"
                 label="Search"
                 value={searchTerm}
-                onInputChange={handleInputChange}
-                onSubmit={handleInputSubmit}
+                onInputChange={handleSearchInput}
+                onSubmit={handleSearchSubmit}
               >
                 Search
               </InputWithLabel>
               <IconButton
-                onInputSubmit={handleInputSubmit}
+                onInputSubmit={handleSearchSubmit}
                 searchTerm={searchTerm}
               />
             </div>
