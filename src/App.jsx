@@ -3,7 +3,7 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
 import { List } from "./components/List";
-import { InputWithLabel } from "./components/InputWithLabel";
+import SearchForm from "./components/SearchForm";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 import axios from "axios";
@@ -36,10 +36,6 @@ const App = () => {
   };
 
   const handleFetchPlayers = useCallback(async () => {
-    if (searchTerm.length > 0 && searchTerm.length < 4) {
-      return;
-    }
-
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
 
     try {
@@ -70,21 +66,11 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <div className="relative max-w-80 h-auto">
-              <InputWithLabel
-                id="search"
-                label="Search"
-                value={searchTerm}
-                onInputChange={handleSearchInput}
-                onSubmit={handleSearchSubmit}
-              >
-                Search
-              </InputWithLabel>
-              <IconButton
-                onInputSubmit={handleSearchSubmit}
-                searchTerm={searchTerm}
-              />
-            </div>
+            <SearchForm
+              searchTerm={searchTerm}
+              onSearchInput={handleSearchInput}
+              onSearchSubmit={handleSearchSubmit}
+            />
             <Dropdown
               id="team-dropdown"
               data={teams}
@@ -111,14 +97,5 @@ const App = () => {
     </div>
   );
 };
-
-const IconButton = ({ onInputSubmit, searchTerm }) => (
-  <button
-    type="button"
-    disabled={searchTerm.length < 4}
-    onClick={onInputSubmit}
-    className="absolute right-0 bottom-8 bg-search-icon bg-no-repeat bg-right bg-auto w-5 h-5"
-  />
-);
 
 export default App;
