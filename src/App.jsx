@@ -35,23 +35,25 @@ const App = () => {
     searchTerm && setSearchTerm("");
   };
 
-  const handleFetchPlayers = useCallback(() => {
+  const handleFetchPlayers = useCallback(async () => {
     if (searchTerm.length > 0 && searchTerm.length < 4) {
       return;
     }
 
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
 
-    axios
-      .get(getPlayerUrl(submittedSearchTerm, selectedTeamId), apiOptions)
-      // getPlayers(submittedSearchTerm, selectedTeamId)
-      .then((result) => {
-        dispatchPlayers({
-          type: "PLAYERS_FETCH_SUCCESS",
-          payload: result.data.response,
-        });
-      })
-      .catch(() => dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" }));
+    try {
+      const result = await axios.get(
+        getPlayerUrl(submittedSearchTerm, selectedTeamId),
+        apiOptions
+      );
+      dispatchPlayers({
+        type: "PLAYERS_FETCH_SUCCESS",
+        payload: result.data.response,
+      });
+    } catch {
+      dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
+    }
   }, [submittedSearchTerm, selectedTeamId]);
 
   console.log("players", players.data);
