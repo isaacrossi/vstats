@@ -2,7 +2,7 @@ import Dropdown from "./components/Dropdown";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
-import { List } from "./components/List";
+import Table from "./components/Table";
 import SearchForm from "./components/SearchForm";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
@@ -91,7 +91,7 @@ const App = () => {
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <List list={players.data} />
+          <Table list={players.data} />
         )}
       </div>
     </div>
