@@ -1,4 +1,13 @@
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
+import { GoX } from "react-icons/go";
+import { GoSearch } from "react-icons/go";
+
+const SearchForm = ({
+  searchTerm,
+  submittedSearchTerm,
+  onSearchInput,
+  onSearchSubmit,
+  onSearchCancel,
+}) => (
   <form onSubmit={onSearchSubmit} className="mb-6 relative max-w-80 h-auto">
     <InputWithLabel
       id="search"
@@ -8,9 +17,16 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
     >
       Search
     </InputWithLabel>
-    <IconButton searchTerm={searchTerm} />
+    {submittedSearchTerm ? (
+      <CancelButton onClick={onSearchCancel} />
+    ) : (
+      <SearchButton searchTerm={searchTerm} />
+    )}
   </form>
 );
+
+//x searches as well we need it to cancel
+//when the search term is empty the search still has a cursor despite not being able to search.
 
 const InputWithLabel = ({
   id,
@@ -38,12 +54,20 @@ const InputWithLabel = ({
   </div>
 );
 
-const IconButton = ({ searchTerm }) => (
+const SearchButton = ({ searchTerm }) => (
   <button
     type="submit"
     disabled={searchTerm.length > 0 && searchTerm.length < 4}
-    className="absolute right-0 bottom-3 bg-search-icon bg-no-repeat bg-right bg-auto w-5 h-5"
-  />
+    className="absolute right-0 bottom-3"
+  >
+    <GoSearch size={20} className="text-red-600" />
+  </button>
 );
 
-export default SearchForm;
+const CancelButton = ({ onClick }) => (
+  <button type="button" className="absolute right-0 bottom-3" onClick={onClick}>
+    <GoX size={20} className="text-red-600" />
+  </button>
+);
+
+export { SearchForm };

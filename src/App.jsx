@@ -1,9 +1,9 @@
-import Dropdown from "./components/Dropdown";
+import { Dropdown } from "./components/Dropdown";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
-import Table from "./components/Table";
-import SearchForm from "./components/SearchForm";
+import { Table } from "./components/Table";
+import { SearchForm } from "./components/SearchForm";
 import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 import axios from "axios";
@@ -28,6 +28,11 @@ const App = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     setSubmittedSearchTerm(searchTerm);
+  };
+
+  const handleSearchCancel = () => {
+    setSearchTerm("");
+    setSubmittedSearchTerm("");
   };
 
   const handleDropdownChange = (item) => {
@@ -68,8 +73,10 @@ const App = () => {
           <div className="flex flex-col">
             <SearchForm
               searchTerm={searchTerm}
+              submittedSearchTerm={submittedSearchTerm}
               onSearchInput={handleSearchInput}
               onSearchSubmit={handleSearchSubmit}
+              onSearchCancel={handleSearchCancel}
             />
             <Dropdown
               id="team-dropdown"

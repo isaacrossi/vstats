@@ -36,7 +36,7 @@ const headers = ["Player", "Team", "Country", "Role"];
 //   </li>
 // );
 
-export const Table = ({ list }) => (
+const Table = ({ list }) => (
   <table className="mt-14 mx-auto">
     <thead>
       <tr className="text-left grid grid-cols-4 gap-x-32 p-5 text-s uppercase text-slate-500 border-b border-red-600">
@@ -76,3 +76,5 @@ export const Table = ({ list }) => (
     </tbody>
   </table>
 );
+
+export { Table };
