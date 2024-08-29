@@ -48,6 +48,7 @@ const App = () => {
         getPlayerUrl(submittedSearchTerm, selectedTeamId),
         apiOptions
       );
+      console.log(result.data);
       dispatchPlayers({
         type: "PLAYERS_FETCH_SUCCESS",
         payload: result.data.response,
@@ -57,7 +58,6 @@ const App = () => {
     }
   }, [submittedSearchTerm, selectedTeamId]);
 
-  console.log("players", players.data);
   useEffect(() => {
     handleFetchPlayers();
   }, [handleFetchPlayers]);
