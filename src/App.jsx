@@ -98,7 +98,11 @@ const App = () => {
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <Table list={players.data} />
+          <Table
+            list={players.data}
+            searchTerm={searchTerm}
+            submittedSearchTerm={submittedSearchTerm}
+          />
         )}
       </div>
     </div>
