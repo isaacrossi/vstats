@@ -11,11 +11,8 @@ const PARAM_SEARCH = "search=";
 const PARAM_TEAM = "team=";
 const PARAM_PAGE = "page=";
 
-// URLs
-export const TEAM_URL = `${API_BASE_URL}${API_TEAMS}?${PARAM_LEAGUE}&${PARAM_SEASON}`;
-
 export const getPlayerUrl = (searchTerm, teamId, page = 1) => {
-  let url = `${API_BASE_URL}${API_PLAYERS}?${PARAM_LEAGUE}&${PARAM_SEASON}`;
+  let url = `${API_BASE_URL}${API_PLAYERS}?${PARAM_LEAGUE}&${PARAM_SEASON}&${PARAM_PAGE}${page}`;
 
   if (searchTerm) {
     url += `&${PARAM_SEARCH}${searchTerm}`;
@@ -23,6 +20,5 @@ export const getPlayerUrl = (searchTerm, teamId, page = 1) => {
     url += `&${PARAM_TEAM}${teamId}`;
   }
 
-  url += `&${PARAM_PAGE}${page}`;
   return url;
 };
