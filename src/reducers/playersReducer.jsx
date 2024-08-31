@@ -11,7 +11,8 @@ export const playersReducer = (state, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload,
+        data: action.payload.list,
+        page: action.payload.page,
       };
     case `PLAYERS_FETCH_FAILURE`:
       return {

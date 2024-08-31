@@ -17,6 +17,7 @@ const App = () => {
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
+    page: "1",
     isLoading: false,
     isError: false,
   });
@@ -51,7 +52,10 @@ const App = () => {
       console.log(result.data);
       dispatchPlayers({
         type: "PLAYERS_FETCH_SUCCESS",
-        payload: result.data.response,
+        payload: {
+          list: result.data.response,
+          page: result.data.paging.current,
+        },
       });
     } catch {
       dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
