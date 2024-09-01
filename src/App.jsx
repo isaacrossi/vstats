@@ -11,9 +11,8 @@ import axios from "axios";
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
-
-  // team id is set in the dropdown component, it gives us team.id to use in the API call
   const [selectedTeamId, setSelectedTeamId] = useState("0");
+  const [urls, setUrls] = useState(getPlayerUrl("", "0", "1"));
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -29,15 +28,20 @@ const App = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     setSubmittedSearchTerm(searchTerm);
+    setSelectedTeamId("0");
+    setUrls(getPlayerUrl(searchTerm, "0"));
   };
 
   const handleSearchCancel = () => {
     setSearchTerm("");
     setSubmittedSearchTerm("");
+    setSelectedTeamId("0");
+    setUrls(getPlayerUrl("", "0"));
   };
 
   const handleDropdownChange = (item) => {
     setSelectedTeamId(item.id);
+    setUrls(getPlayerUrl(submittedSearchTerm, item.id));
     searchTerm && setSearchTerm("");
   };
 
@@ -45,11 +49,9 @@ const App = () => {
     dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
 
     try {
-      const result = await axios.get(
-        getPlayerUrl(submittedSearchTerm, selectedTeamId),
-        apiOptions
-      );
-      console.log(result.data);
+      console.log("Fetching players with URL:", urls); // Log the URL
+      const result = await axios.get(urls, apiOptions);
+      console.log("API response:", result.data); // Log the API response
       dispatchPlayers({
         type: "PLAYERS_FETCH_SUCCESS",
         payload: {
@@ -57,10 +59,11 @@ const App = () => {
           page: result.data.paging.current,
         },
       });
-    } catch {
+    } catch (error) {
+      console.error("API fetch error:", error); // Log any errors
       dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
     }
-  }, [submittedSearchTerm, selectedTeamId]);
+  }, [urls]);
 
   useEffect(() => {
     handleFetchPlayers();
