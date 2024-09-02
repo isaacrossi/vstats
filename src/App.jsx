@@ -8,6 +8,18 @@ import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 import axios from "axios";
 
+const fetchPlayers = async (url, options) => {
+  try {
+    console.log("Fetching players with URL:", url);
+    const result = await axios.get(url, options);
+    console.log("API response:", result.data);
+    return result.data;
+  } catch (error) {
+    console.error("API fetch error:", error);
+    throw error;
+  }
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
@@ -50,17 +62,16 @@ const App = () => {
 
     try {
       console.log("Fetching players with URL:", urls); // Log the URL
-      const result = await axios.get(urls, apiOptions);
-      console.log("API response:", result.data); // Log the API response
+      const data = await fetchPlayers(urls, apiOptions);
+      console.log("API response:", data); // Log the API response
       dispatchPlayers({
         type: "PLAYERS_FETCH_SUCCESS",
         payload: {
-          list: result.data.response,
-          page: result.data.paging.current,
+          list: data.response,
+          page: data.paging.current,
         },
       });
     } catch (error) {
-      console.error("API fetch error:", error); // Log any errors
       dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
     }
   }, [urls]);
