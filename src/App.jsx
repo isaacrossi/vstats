@@ -24,7 +24,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState("0");
-  const [urls, setUrls] = useState(getPlayerUrl("", "0", "1"));
+  const [urls, setUrls] = useState([getPlayerUrl(searchTerm, "0", "1")]);
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -38,10 +38,20 @@ const App = () => {
   };
 
   const handleSearchSubmit = (event) => {
-    event.preventDefault();
+    dispatchPlayers({ type: "PLAYERS_RESET" });
     setSubmittedSearchTerm(searchTerm);
-    setSelectedTeamId("0");
-    setUrls(getPlayerUrl(searchTerm, "0"));
+    const url = getPlayerUrl(searchTerm, "0", "1");
+    setUrls(urls.concat(url));
+    event.preventDefault();
+  };
+
+  const handleMore = () => {
+    const url = getPlayerUrl(
+      submittedSearchTerm,
+      selectedTeamId,
+      players.page + 1
+    );
+    setUrls(urls.concat(url));
   };
 
   const handleSearchCancel = () => {
@@ -52,8 +62,9 @@ const App = () => {
   };
 
   const handleDropdownChange = (item) => {
+    dispatchPlayers({ type: "PLAYERS_RESET" });
     setSelectedTeamId(item.id);
-    setUrls(getPlayerUrl(submittedSearchTerm, item.id));
+    setUrls(getPlayerUrl(submittedSearchTerm, item.id, "1"));
     searchTerm && setSearchTerm("");
   };
 
@@ -123,6 +134,12 @@ const App = () => {
           />
         )}
       </div>
+      <button
+        className="block w-full py-4 text-white bg-blue-500"
+        onClick={handleMore}
+      >
+        MORE
+      </button>
     </div>
   );
 };

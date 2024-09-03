@@ -11,7 +11,10 @@ export const playersReducer = (state, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload.list,
+        data:
+          action.payload.page === "1"
+            ? action.payload.list
+            : state.data.concat(action.payload.list),
         page: action.payload.page,
       };
     case `PLAYERS_FETCH_FAILURE`:
@@ -19,6 +22,12 @@ export const playersReducer = (state, action) => {
         ...state,
         isLoading: false,
         isError: true,
+      };
+    case "PLAYERS_RESET":
+      return {
+        ...state,
+        data: [],
+        page: "1",
       };
     default:
       throw new Error();
