@@ -8,18 +8,6 @@ import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 import axios from "axios";
 
-const fetchPlayers = async (url, options) => {
-  try {
-    console.log("Fetching players with URL:", url);
-    const result = await axios.get(url, options);
-    console.log("API response:", result.data);
-    return result.data;
-  } catch (error) {
-    console.error("API fetch error:", error);
-    throw error;
-  }
-};
-
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
@@ -58,14 +46,16 @@ const App = () => {
     setSearchTerm("");
     setSubmittedSearchTerm("");
     setSelectedTeamId("0");
-    setUrls(getPlayerUrl("", "0"));
+    setUrls(getPlayerUrl("", "0", "1"));
   };
 
   const handleDropdownChange = (item) => {
-    dispatchPlayers({ type: "PLAYERS_RESET" });
-    setSelectedTeamId(item.id);
-    setUrls(getPlayerUrl(submittedSearchTerm, item.id, "1"));
-    searchTerm && setSearchTerm("");
+    if (item.id !== selectedTeamId) {
+      dispatchPlayers({ type: "PLAYERS_RESET" });
+      setSelectedTeamId(item.id);
+      setUrls(getPlayerUrl(submittedSearchTerm, item.id, "1"));
+      searchTerm && setSearchTerm("");
+    }
   };
 
   const handleFetchPlayers = useCallback(async () => {
@@ -73,16 +63,17 @@ const App = () => {
 
     try {
       console.log("Fetching players with URL:", urls); // Log the URL
-      const data = await fetchPlayers(urls, apiOptions);
-      console.log("API response:", data); // Log the API response
+      const result = await axios.get(urls, apiOptions);
+      console.log("API response:", result.data); // Log the API response
       dispatchPlayers({
         type: "PLAYERS_FETCH_SUCCESS",
         payload: {
-          list: data.response,
-          page: data.paging.current,
+          list: result.data.response,
+          page: result.data.paging.current,
         },
       });
     } catch (error) {
+      console.error("API fetch error:", error); // Log any errors
       dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
     }
   }, [urls]);
