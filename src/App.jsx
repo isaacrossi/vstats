@@ -100,13 +100,6 @@ const App = () => {
           </h1>
 
           <div className="flex flex-col">
-            <SearchForm
-              searchTerm={searchTerm}
-              submittedSearchTerm={submittedSearchTerm}
-              onSearchInput={handleSearchInput}
-              onSearchSubmit={handleSearchSubmit}
-              onSearchCancel={handleSearchCancel}
-            />
             <Dropdown
               id="team-dropdown"
               data={teams}
@@ -116,8 +109,17 @@ const App = () => {
               category="team"
               imgKey="logo"
               onChange={handleDropdownChange}
-              submittedSearchTerm={submittedSearchTerm}
             />
+            {selectedTeamId === "0" && (
+              <SearchForm
+                searchTerm={searchTerm}
+                submittedSearchTerm={submittedSearchTerm}
+                onSearchInput={handleSearchInput}
+                onSearchSubmit={handleSearchSubmit}
+                onSearchCancel={handleSearchCancel}
+                selectedItemId={selectedTeamId}
+              />
+            )}
           </div>
         </header>
         <hr className="border-slate-600" />
