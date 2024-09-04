@@ -11,12 +11,12 @@ import axios from "axios";
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
-  const [selectedTeamId, setSelectedTeamId] = useState("0");
-  const [urls, setUrls] = useState([getPlayerUrl(searchTerm, "0", "1")]);
+  const [selectedTeamId, setSelectedTeamId] = useState(0);
+  const [urls, setUrls] = useState([getPlayerUrl(searchTerm, 0)]);
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
-    page: "1",
+    page: 1,
     isLoading: false,
     isError: false,
   });
@@ -28,7 +28,7 @@ const App = () => {
   const handleSearchSubmit = (event) => {
     dispatchPlayers({ type: "PLAYERS_RESET" });
     setSubmittedSearchTerm(searchTerm);
-    const url = getPlayerUrl(searchTerm, "0", "1");
+    const url = getPlayerUrl(searchTerm, 0, 1);
     setUrls(urls.concat(url));
     event.preventDefault();
   };
@@ -45,15 +45,15 @@ const App = () => {
   const handleSearchCancel = () => {
     setSearchTerm("");
     setSubmittedSearchTerm("");
-    setSelectedTeamId("0");
-    setUrls(getPlayerUrl("", "0", "1"));
+    setSelectedTeamId(0);
+    setUrls(getPlayerUrl("", 0, 1));
   };
 
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
       dispatchPlayers({ type: "PLAYERS_RESET" });
       setSelectedTeamId(item.id);
-      setUrls(getPlayerUrl(submittedSearchTerm, item.id, "1"));
+      setUrls(getPlayerUrl(submittedSearchTerm, item.id, 1));
       searchTerm && setSearchTerm("");
     }
   };
@@ -101,7 +101,7 @@ const App = () => {
               imgKey="logo"
               onChange={handleDropdownChange}
             />
-            {selectedTeamId === "0" && (
+            {selectedTeamId === 0 && (
               <SearchForm
                 searchTerm={searchTerm}
                 submittedSearchTerm={submittedSearchTerm}
@@ -117,22 +117,22 @@ const App = () => {
         {players.isError && (
           <p className="text-slate-50">Something went wrong...</p>
         )}
+        <Table
+          list={players.data}
+          searchTerm={searchTerm}
+          submittedSearchTerm={submittedSearchTerm}
+        />
         {players.isLoading ? (
           <p className="text-slate-50">Loading....</p>
         ) : (
-          <Table
-            list={players.data}
-            searchTerm={searchTerm}
-            submittedSearchTerm={submittedSearchTerm}
-          />
+          <button
+            className="block w-full py-4 text-white bg-blue-500"
+            onClick={handleMore}
+          >
+            MORE
+          </button>
         )}
       </div>
-      <button
-        className="block w-full py-4 text-white bg-blue-500"
-        onClick={handleMore}
-      >
-        MORE
-      </button>
     </div>
   );
 };

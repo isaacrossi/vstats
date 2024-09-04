@@ -23,6 +23,7 @@ const Dropdown = ({
   const handleChange = (item) => {
     setIsOpen(false);
     onChange(item);
+    console.log(item.id);
   };
 
   // Ref for the dropdown element
@@ -32,8 +33,6 @@ const Dropdown = ({
     ref: dropdownRef,
     handler: () => setIsOpen(false),
   });
-
-  console.log(selectedItem); // Log the selected item for debugging
 
   return (
     <div ref={dropdownRef} className="relative w-64">
@@ -77,7 +76,7 @@ const Dropdown = ({
                 key={item?.id}
                 onClick={() => handleChange(item)}
               >
-                {hasImage && item.id !== "0" && (
+                {hasImage && item.id !== 0 && (
                   <img
                     className="mr-2 h-6 w-6"
                     src={item?.[imgKey] || ""}

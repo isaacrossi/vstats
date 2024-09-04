@@ -12,7 +12,7 @@ export const playersReducer = (state, action) => {
         isLoading: false,
         isError: false,
         data:
-          action.payload.page === "1"
+          action.payload.page === 1
             ? action.payload.list
             : state.data.concat(action.payload.list),
         page: action.payload.page,
