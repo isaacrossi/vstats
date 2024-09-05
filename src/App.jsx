@@ -29,7 +29,8 @@ const App = () => {
     dispatchPlayers({ type: "PLAYERS_RESET" });
     setSubmittedSearchTerm(searchTerm);
     const url = getPlayerUrl(searchTerm, 0, 1);
-    setUrls(urls.concat(url));
+    console.log("URL:", url);
+    setUrls([url]);
     event.preventDefault();
   };
 
