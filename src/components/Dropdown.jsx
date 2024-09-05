@@ -46,7 +46,7 @@ const Dropdown = ({
         className="flex align-center justify-between w-64 py-2 bg-blue-1000 border-b border-red-600 text-slate-50"
       >
         <span className="flex">
-          {selectedItemId !== "0" && selectedItem && (
+          {selectedItemId !== 0 && selectedItem && (
             <img
               className="mr-2 h-6 w-6"
               src={selectedItem?.[imgKey] || ""}
