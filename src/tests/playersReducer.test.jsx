@@ -238,4 +238,46 @@ describe("playersReducer", () => {
 
     expect(newState).toEqual(expectedState);
   });
+
+  it("fails to fetch players from the API", () => {
+    const action = { type: "PLAYERS_FETCH_FAILURE" };
+    const state = {
+      data: [],
+      page: 1,
+      isLoading: true,
+      isError: false,
+    };
+
+    const newState = playersReducer(state, action);
+
+    const expectedState = {
+      data: [],
+      page: 1,
+      isLoading: false,
+      isError: true,
+    };
+
+    expect(newState).toEqual(expectedState);
+  });
+
+  it("resets the players state", () => {
+    const action = { type: "PLAYERS_RESET" };
+    const state = {
+      data: players,
+      page: 1,
+      isLoading: false,
+      isError: false,
+    };
+
+    const newState = playersReducer(state, action);
+
+    const expectedState = {
+      data: [],
+      page: 1,
+      isLoading: false,
+      isError: false,
+    };
+
+    expect(newState).toEqual(expectedState);
+  });
 });

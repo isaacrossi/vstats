@@ -27,7 +27,7 @@ export const playersReducer = (state, action) => {
       return {
         ...state,
         data: [],
-        page: "1",
+        page: 1,
       };
     default:
       throw new Error();
