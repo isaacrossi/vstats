@@ -211,4 +211,31 @@ describe("playersReducer", () => {
 
     expect(newState).toEqual(expectedState);
   });
+
+  it("successfully fetches players from the API", () => {
+    const action = {
+      type: "PLAYERS_FETCH_SUCCESS",
+      payload: {
+        list: players,
+        page: 1,
+      },
+    };
+    const state = {
+      data: [],
+      page: 1,
+      isLoading: true,
+      isError: false,
+    };
+
+    const newState = playersReducer(state, action);
+
+    const expectedState = {
+      data: players,
+      page: 1,
+      isLoading: false,
+      isError: false,
+    };
+
+    expect(newState).toEqual(expectedState);
+  });
 });
