@@ -8,4 +8,8 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./tets/setup.js",
+  },
 });
