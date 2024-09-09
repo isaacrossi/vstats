@@ -10,6 +10,6 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    setupFiles: "./tets/setup.js",
+    setupFiles: "src/tests/setup.js",
   },
 });
