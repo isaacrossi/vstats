@@ -86,7 +86,7 @@ const App = () => {
   return (
     <div className="bg-blue-1000">
       <div className="container mx-auto">
-        <header className="h-1/2 pt-28 pb-14 bg-blue-diagonal bg-cover bg-no-repeat">
+        <header className="h-1/2 pt-28 pb-14 bg-blue-diagonal bg-contain bg-no-repeat">
           <h1 className="mb-12 font-heading text-4xl text-slate-50 uppercase">
             Players
           </h1>
