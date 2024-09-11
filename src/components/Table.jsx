@@ -35,7 +35,7 @@ const TableRow = ({ item }) => (
       <img
         className="w-6 h-6 mr-2"
         src={item.statistics[0].team.logo}
-        alt={item.statistics[0].team.name + "logo"}
+        alt={`${item.statistics[0].team.name} logo`}
       />
       {shortenTeamName(item.statistics[0].team.name)}
     </TableCell>
@@ -55,4 +55,4 @@ const TableRow = ({ item }) => (
 
 const TableCell = ({ children }) => <td className="flex w-56">{children}</td>;
 
-export { Table };
+export { Table, TableHeader, TableBody, TableRow };
