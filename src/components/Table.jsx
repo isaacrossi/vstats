@@ -1,6 +1,6 @@
 import { shortenTeamName } from "../utils/shortenTeamName";
 import { countries } from "../data/countries";
-import headers from "../data/headers";
+import { headers } from "../data/headers";
 
 const Table = ({ list }) => (
   <table className="mt-14 mx-auto">

@@ -8,11 +8,33 @@ import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
 import axios from "axios";
 
+const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
+  dispatch({ type: "PLAYERS_FETCH_INIT" });
+
+  try {
+    const url = getPlayerUrl(searchTerm, teamId, page);
+    console.log("Fetching players with URL:", url); // Log the URL
+    const result = await axios.get(url, apiOptions);
+    console.log("API response:", result.data); // Log the API response
+    dispatch({
+      type: "PLAYERS_FETCH_SUCCESS",
+      payload: {
+        list: result.data.response,
+        page: result.data.paging.current,
+      },
+    });
+  } catch (error) {
+    console.error("API fetch error:", error); // Log any errors
+    dispatch({ type: "PLAYERS_FETCH_FAILURE" });
+  }
+};
+
 const App = () => {
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  const [scrollY, setScrollY] = useState(window.scrollY);
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState(0);
-  const [urls, setUrls] = useState([getPlayerUrl(searchTerm, 0)]);
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -21,67 +43,74 @@ const App = () => {
     isError: false,
   });
 
+  const atBottom = () => {
+    const reachedBottom =
+      viewportHeight + scrollY >= document.body.offsetHeight;
+    if (reachedBottom && !players.isLoading) {
+      handleMore();
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportHeight(window.innerHeight);
+    };
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      atBottom();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [viewportHeight, scrollY]);
+
   const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearchSubmit = (event) => {
+    event.preventDefault();
     dispatchPlayers({ type: "PLAYERS_RESET" });
     setSubmittedSearchTerm(searchTerm);
-    const url = getPlayerUrl(searchTerm, 0, 1);
-    console.log("URL:", url);
-    setUrls([url]);
-    event.preventDefault();
+    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers); // Fetch players for the new search term
   };
 
   const handleMore = () => {
-    const url = getPlayerUrl(
+    fetchPlayers(
+      players.page + 1,
       submittedSearchTerm,
       selectedTeamId,
-      players.page + 1
+      dispatchPlayers
     );
-    setUrls(urls.concat(url));
   };
 
   const handleSearchCancel = () => {
     setSearchTerm("");
     setSubmittedSearchTerm("");
     setSelectedTeamId(0);
-    setUrls(getPlayerUrl("", 0, 1));
+    dispatchPlayers({ type: "PLAYERS_RESET" });
+    fetchPlayers(1, "", 0, dispatchPlayers); // Fetch initial players
   };
 
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
       dispatchPlayers({ type: "PLAYERS_RESET" });
       setSelectedTeamId(item.id);
-      setUrls(getPlayerUrl(submittedSearchTerm, item.id, 1));
+      fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers); // Fetch players for the selected team
       searchTerm && setSearchTerm("");
     }
   };
 
-  const handleFetchPlayers = useCallback(async () => {
-    dispatchPlayers({ type: "PLAYERS_FETCH_INIT" });
-
-    try {
-      console.log("Fetching players with URL:", urls); // Log the URL
-      const result = await axios.get(urls, apiOptions);
-      console.log("API response:", result.data); // Log the API response
-      dispatchPlayers({
-        type: "PLAYERS_FETCH_SUCCESS",
-        payload: {
-          list: result.data.response,
-          page: result.data.paging.current,
-        },
-      });
-    } catch (error) {
-      console.error("API fetch error:", error); // Log any errors
-      dispatchPlayers({ type: "PLAYERS_FETCH_FAILURE" });
-    }
-  }, [urls]);
-
   useEffect(() => {
-    handleFetchPlayers();
-  }, [handleFetchPlayers]);
+    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
+  }, []);
 
   return (
     <div className="bg-blue-1000">
@@ -123,16 +152,7 @@ const App = () => {
           searchTerm={searchTerm}
           submittedSearchTerm={submittedSearchTerm}
         />
-        {players.isLoading ? (
-          <p className="text-slate-50">Loading....</p>
-        ) : (
-          <button
-            className="block w-full py-4 text-white bg-blue-500"
-            onClick={handleMore}
-          >
-            MORE
-          </button>
-        )}
+        {players.isLoading && <p className="text-slate-50">Loading....</p>}
       </div>
     </div>
   );
