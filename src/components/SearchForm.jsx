@@ -57,6 +57,7 @@ const InputWithLabel = ({
 const SearchButton = ({ searchTerm }) => (
   <button
     type="submit"
+    aria-label="Submit search"
     disabled={searchTerm.length > 0 && searchTerm.length < 4}
     className="absolute right-0 bottom-3"
   >
@@ -65,7 +66,12 @@ const SearchButton = ({ searchTerm }) => (
 );
 
 const CancelButton = ({ onClick }) => (
-  <button type="button" className="absolute right-0 bottom-3" onClick={onClick}>
+  <button
+    type="button"
+    aria-label="Cancel search"
+    className="absolute right-0 bottom-3"
+    onClick={onClick}
+  >
     <GoX size={20} className="text-red-600" />
   </button>
 );
