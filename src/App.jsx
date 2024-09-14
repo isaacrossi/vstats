@@ -1,5 +1,5 @@
 import { Dropdown } from "./components/Dropdown";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
 import { Table } from "./components/Table";

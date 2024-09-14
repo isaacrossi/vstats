@@ -1,9 +1,34 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { TableRow, TableBody } from "../components/Table";
+import { Table, TableRow, TableBody } from "../components/Table";
 import { players } from "./dummyPlayers";
 import { shortenTeamName } from "../utils/shortenTeamName";
 import { headers } from "../data/headers";
+
+describe("Table", () => {
+  it("renders TableHeader and TableBody components when list is not empty", () => {
+    render(<Table list={players} />);
+    expect(screen.getByRole("table")).toBeInTheDocument();
+    expect(
+      screen.getByRole("table").querySelector("thead")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("table").querySelector("tbody")
+    ).toBeInTheDocument();
+    screen.debug();
+  });
+
+  it("does not render TableHeader when list is empty", () => {
+    render(<Table list={[]} />);
+    expect(screen.getByRole("table")).toBeInTheDocument();
+    expect(
+      screen.getByRole("table").querySelector("thead")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("table").querySelector("tbody")
+    ).toBeInTheDocument();
+  });
+});
 
 describe("TableRow", () => {
   it("renders header cells with headers data when isHeader is true", () => {
@@ -12,6 +37,11 @@ describe("TableRow", () => {
       expect(screen.getByText(header)).toBeInTheDocument();
       expect(screen.getByText(header).closest("th")).toBeInTheDocument();
     });
+  });
+
+  it("renders no header cells when isHeader is false", () => {
+    render(<TableRow item={players[0]} isHeader={false} />);
+    expect(screen.queryAllByRole("th")).toHaveLength(0);
   });
 
   it("renders player name in body row", () => {
