@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { SearchForm } from "../components/SearchForm";
+import { SearchForm, InputWithLabel } from "../components/SearchForm";
 
 describe("SearchForm", () => {
   const searchFormProps = {
@@ -10,17 +10,6 @@ describe("SearchForm", () => {
     onSearchSubmit: vi.fn(),
     onSearchCancel: vi.fn(),
   };
-
-  it("renders the input field with its value", () => {
-    render(<SearchForm {...searchFormProps} />);
-    expect(screen.getByDisplayValue("test")).toBeInTheDocument();
-    screen.debug();
-  });
-
-  it("renders the correct label for the input field", () => {
-    render(<SearchForm {...searchFormProps} />);
-    expect(screen.getByLabelText("Search")).toBeInTheDocument();
-  });
 
   it("renders a clickable search button", () => {
     render(<SearchForm {...searchFormProps} />);
@@ -62,5 +51,56 @@ describe("SearchForm", () => {
     expect(
       screen.getByRole("button", { name: "Submit search" })
     ).toBeDisabled();
+  });
+});
+
+describe("InputWithLabel", () => {
+  const inputProps = {
+    id: "search",
+    value: "test",
+    children: "Search",
+    onInputChange: vi.fn(),
+    type: "text",
+    isFocused: true,
+  };
+
+  it("renders the input field with its value", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(screen.getByDisplayValue("test")).toBeInTheDocument();
+  });
+
+  it("renders the correct label for the input field", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(screen.getByLabelText("Search")).toBeInTheDocument();
+  });
+
+  it("renders the correct placeholder text", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(
+      screen.getByPlaceholderText("Search must be at least 4 characters")
+    ).toBeInTheDocument();
+  });
+
+  it("renders the correct id for the input field", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(screen.getByDisplayValue("test").id).toBe("search");
+  });
+
+  it("renders the correct type for the input field", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(screen.getByDisplayValue("test").type).toBe("text");
+  });
+
+  it("renders the input field with autoFocus", () => {
+    render(<InputWithLabel {...inputProps} />);
+    expect(screen.getByDisplayValue("test")).toHaveFocus();
+  });
+
+  it("calls onInputChange when the input field value changes", () => {
+    render(<InputWithLabel {...inputProps} />);
+    fireEvent.change(screen.getByDisplayValue("test"), {
+      target: { value: "new value" },
+    });
+    expect(inputProps.onInputChange).toHaveBeenCalledTimes(1);
   });
 });

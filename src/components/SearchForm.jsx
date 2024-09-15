@@ -73,4 +73,4 @@ const CancelButton = ({ onClick }) => (
   </button>
 );
 
-export { SearchForm };
+export { SearchForm, InputWithLabel };

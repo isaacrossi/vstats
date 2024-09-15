@@ -62,4 +62,4 @@ const TableBody = ({ list }) => (
 
 const TableCell = ({ children }) => <td className="flex w-56">{children}</td>;
 
-export { Table, TableHeader, TableBody, TableRow, headers };
+export { Table, TableHeader, TableBody, TableRow };
