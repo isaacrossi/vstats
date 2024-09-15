@@ -25,9 +25,6 @@ const SearchForm = ({
   </form>
 );
 
-//x searches as well we need it to cancel
-//when the search term is empty the search still has a cursor despite not being able to search.
-
 const InputWithLabel = ({
   id,
   value,
