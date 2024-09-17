@@ -1,13 +1,15 @@
-import { Dropdown } from "./components/Dropdown";
-import { useEffect, useReducer, useState } from "react";
+import React, { useState, useReducer, useEffect } from "react";
+import { debounce } from "lodash";
+import axios from "axios";
 import { apiOptions } from "./config/apiOptions";
 import { playersReducer } from "./reducers/playersReducer";
+import { getPlayerUrl } from "./config/apiUrls";
+import { Dropdown } from "./components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
-import { getPlayerUrl } from "./config/apiUrls";
 import { teams } from "./data/teams";
-import axios from "axios";
 
+// Fetch players function
 const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
   dispatch({ type: "PLAYERS_FETCH_INIT" });
 
@@ -30,11 +32,12 @@ const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
 };
 
 const App = () => {
-  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
-  const [scrollY, setScrollY] = useState(window.scrollY);
+  //we've basically added a reachedBottom state to track if the user has reached the bottom of the page and then debounced our checkScrollPosition function to run every 200ms. This way, we can avoid calling the function too frequently and causing performance issues.
+
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState(0);
+  const [hasReachedBottom, setHasReachedBottom] = useState(false); // Track if bottom is reached
 
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
@@ -43,52 +46,47 @@ const App = () => {
     isError: false,
   });
 
-  const atBottom = () => {
-    const reachedBottom =
-      viewportHeight + scrollY >= document.body.offsetHeight;
-    if (reachedBottom && !players.isLoading) {
+  // Function to check if the user has scrolled to the bottom
+  const checkScrollPosition = debounce(() => {
+    const buffer = 150; // Buffer to trigger early
+    const viewportHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    const reachedBottom = viewportHeight + scrollY + buffer >= documentHeight;
+
+    if (reachedBottom && !players.isLoading && !hasReachedBottom) {
+      console.log("Reached bottom, fetching more players...");
+      setHasReachedBottom(true); // Prevent further fetches
       handleMore();
     }
-  };
+  }, 200); // Debounce with 200ms delay
 
+  // Handle scroll and resize events
   useEffect(() => {
-    const handleResize = () => {
-      setViewportHeight(window.innerHeight);
-    };
-
     const handleScroll = () => {
-      setScrollY(window.scrollY);
-      atBottom();
+      checkScrollPosition(); // Check scroll position directly
     };
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
 
-    // Cleanup the event listener on component unmount
+    // Cleanup the event listeners on component unmount
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [viewportHeight, scrollY]);
+  }, [players.isLoading, hasReachedBottom]); // Only reattach if loading state or bottom state changes
 
-  const handleSearchInput = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    dispatchPlayers({ type: "PLAYERS_RESET" });
-    setSubmittedSearchTerm(searchTerm);
-    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers); // Fetch players for the new search term
-  };
-
+  // Function to handle fetching more players
   const handleMore = () => {
-    fetchPlayers(
-      players.page + 1,
-      submittedSearchTerm,
-      selectedTeamId,
-      dispatchPlayers
-    );
+    if (!players.isLoading && players.page <= 19) {
+      fetchPlayers(
+        players.page + 1,
+        submittedSearchTerm,
+        selectedTeamId,
+        dispatchPlayers
+      ).then(() => {
+        setHasReachedBottom(false); // Allow fetching again once new data is loaded
+      });
+    }
   };
 
   const handleSearchCancel = () => {
@@ -96,21 +94,31 @@ const App = () => {
     setSubmittedSearchTerm("");
     setSelectedTeamId(0);
     dispatchPlayers({ type: "PLAYERS_RESET" });
-    fetchPlayers(1, "", 0, dispatchPlayers); // Fetch initial players
+    fetchPlayers(1, "", 0, dispatchPlayers);
   };
 
+  // Function to handle search form submission
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    dispatchPlayers({ type: "PLAYERS_RESET" });
+    setSubmittedSearchTerm(searchTerm);
+    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
+  };
+
+  // Function to handle dropdown selection
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
       dispatchPlayers({ type: "PLAYERS_RESET" });
       setSelectedTeamId(item.id);
-      fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers); // Fetch players for the selected team
+      fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers);
       searchTerm && setSearchTerm("");
     }
   };
 
+  // Initial fetch for players when component mounts or dependencies change
   useEffect(() => {
     fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
-  }, []);
+  }, [searchTerm, selectedTeamId]);
 
   return (
     <div className="bg-blue-1000">
@@ -135,7 +143,7 @@ const App = () => {
               <SearchForm
                 searchTerm={searchTerm}
                 submittedSearchTerm={submittedSearchTerm}
-                onSearchInput={handleSearchInput}
+                onSearchInput={(e) => setSearchTerm(e.target.value)}
                 onSearchSubmit={handleSearchSubmit}
                 onSearchCancel={handleSearchCancel}
                 selectedItemId={selectedTeamId}
