@@ -48,13 +48,13 @@ const App = () => {
 
   // Function to check if the user has scrolled to the bottom
   const checkScrollPosition = debounce(() => {
-    const buffer = 150; // Buffer to trigger early
+    const buffer = 100; // Buffer to trigger early
     const viewportHeight = window.innerHeight;
     const scrollY = window.scrollY;
     const documentHeight = document.documentElement.scrollHeight;
-    const reachedBottom = viewportHeight + scrollY + buffer >= documentHeight;
+    const isScrollNearEnd = viewportHeight + scrollY + buffer >= documentHeight;
 
-    if (reachedBottom && !players.isLoading && !hasReachedBottom) {
+    if (isScrollNearEnd && !players.isLoading && !hasReachedBottom) {
       console.log("Reached bottom, fetching more players...");
       setHasReachedBottom(true); // Prevent further fetches
       handleMore();
