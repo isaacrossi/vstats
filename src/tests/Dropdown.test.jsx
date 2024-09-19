@@ -6,9 +6,21 @@ describe("Dropdown", () => {
   const dropdownProps = {
     id: "dropdown",
     data: [
-      { id: 0, name: "All", img: "all.png" },
-      { id: 1, name: "Team 1", img: "team1.png" },
-      { id: 2, name: "Team 2", img: "team2.png" },
+      {
+        id: 0,
+        name: "All Teams",
+        logo: "",
+      },
+      {
+        id: 948,
+        name: "Adelaide United",
+        logo: "https://media.api-sports.io/football/teams/948.png",
+      },
+      {
+        id: 24608,
+        name: "Aukland FC",
+        logo: "https://media.api-sports.io/football/teams/24608.png",
+      },
     ],
     title: "select",
     selectedItemId: 0,
@@ -22,12 +34,11 @@ describe("Dropdown", () => {
     expect(
       screen.getByRole("button", { name: "Toggle dropdown" })
     ).toBeInTheDocument();
-    screen.debug();
   });
 
   it("displays the selected item name in the button", () => {
     render(<Dropdown {...dropdownProps} />);
-    expect(screen.getByText("All")).toBeInTheDocument();
+    expect(screen.getByText("All Teams")).toBeInTheDocument();
   });
 
   it("calls onChange when an item is selected", () => {
@@ -35,25 +46,40 @@ describe("Dropdown", () => {
     // Open the dropdown
     fireEvent.click(screen.getByRole("button", { name: "Toggle dropdown" }));
     // Select an item
-    fireEvent.click(screen.getByText("Team 1"));
+    fireEvent.click(screen.getByText("Adelaide United"));
     expect(dropdownProps.onChange).toHaveBeenCalledTimes(1);
   });
 
   it("initially renders with the dropdown closed", () => {
     render(<Dropdown {...dropdownProps} />);
-    expect(screen.queryByText("All")).toBeInTheDocument();
+    expect(screen.queryByText("All Teams")).toBeInTheDocument();
   });
 
   it("opens and closes the dropdown when the button is clicked", () => {
     render(<Dropdown {...dropdownProps} />);
+    // Initially, the dropdown should be closed and only the selected item should be visible
+    expect(screen.getByText("All Teams")).toBeInTheDocument();
+    expect(screen.queryByText("Adelaide United")).not.toBeInTheDocument();
+    expect(screen.queryByText("Aukland FC")).not.toBeInTheDocument();
+
+    // Open the dropdown
+    fireEvent.click(screen.getByRole("button", { name: "Toggle dropdown" }));
+    expect(screen.getAllByRole("listitem")).toHaveLength(
+      dropdownProps.data.length
+    );
+
+    // Close the dropdown
+    fireEvent.click(screen.getByText("Adelaide United"));
+    expect(screen.getByText("All Teams")).toBeInTheDocument();
+    expect(screen.queryByText("Adelaide United")).not.toBeInTheDocument();
+    expect(screen.queryByText("Aukland FC")).not.toBeInTheDocument();
+  });
+
+  it("closes the dropdown when clicking outside", () => {
+    render(<Dropdown {...dropdownProps} />);
     const toggleButton = screen.getByRole("button", {
       name: "Toggle dropdown",
     });
-
-    // Initially, the dropdown should be closed and only the selected item should be visible
-    expect(screen.getByText("All")).toBeInTheDocument();
-    expect(screen.queryByText("Team 1")).not.toBeInTheDocument();
-    expect(screen.queryByText("Team 2")).not.toBeInTheDocument();
 
     // Open the dropdown
     fireEvent.click(toggleButton);
@@ -61,10 +87,9 @@ describe("Dropdown", () => {
       dropdownProps.data.length
     );
 
-    // Close the dropdown
-    fireEvent.click(toggleButton);
-    expect(screen.getByText("All")).toBeInTheDocument();
-    expect(screen.queryByText("Team 1")).not.toBeInTheDocument();
-    expect(screen.queryByText("Team 2")).not.toBeInTheDocument();
+    // Click outside the dropdown
+    fireEvent.mouseDown(document);
+    expect(screen.queryByText("Adelaide United")).not.toBeInTheDocument();
+    expect(screen.queryByText("Aukland FC")).not.toBeInTheDocument();
   });
 });
