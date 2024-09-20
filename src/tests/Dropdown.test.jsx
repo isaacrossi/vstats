@@ -56,7 +56,7 @@ describe("Dropdown", () => {
   });
 
   it("opens and closes the dropdown when the button is clicked", () => {
-    render(<Dropdown {...dropdownProps} />);
+    const { rerender } = render(<Dropdown {...dropdownProps} />);
     // Initially, the dropdown should be closed and only the selected item should be visible
     expect(screen.getByText("All Teams")).toBeInTheDocument();
     expect(screen.queryByText("Adelaide United")).not.toBeInTheDocument();
@@ -68,8 +68,35 @@ describe("Dropdown", () => {
       dropdownProps.data.length
     );
 
-    // Close the dropdown
+    // Select an item and close the dropdown
     fireEvent.click(screen.getByText("Adelaide United"));
+    expect(dropdownProps.onChange).toHaveBeenCalledWith({
+      id: 948,
+      name: "Adelaide United",
+      logo: "https://media.api-sports.io/football/teams/948.png",
+    });
+
+    // Update the selectedItemId prop to reflect the new selection
+    rerender(<Dropdown {...dropdownProps} selectedItemId={948} />);
+
+    // Verify the selected item is displayed
+    expect(screen.getByText("Adelaide United")).toBeInTheDocument();
+    expect(screen.queryByText("All Teams")).not.toBeInTheDocument();
+    expect(screen.queryByText("Aukland FC")).not.toBeInTheDocument();
+
+    // Open the dropdown again and select "All Teams"
+    fireEvent.click(screen.getByRole("button", { name: "Toggle dropdown" }));
+    fireEvent.click(screen.getByText("All Teams"));
+    expect(dropdownProps.onChange).toHaveBeenCalledWith({
+      id: 0,
+      name: "All Teams",
+      logo: "",
+    });
+
+    // Update the selectedItemId prop to reflect the new selection
+    rerender(<Dropdown {...dropdownProps} selectedItemId={0} />);
+
+    // Verify the selected item is displayed
     expect(screen.getByText("All Teams")).toBeInTheDocument();
     expect(screen.queryByText("Adelaide United")).not.toBeInTheDocument();
     expect(screen.queryByText("Aukland FC")).not.toBeInTheDocument();
