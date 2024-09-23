@@ -5,6 +5,30 @@ import { Dropdown } from "./components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "./data/teams";
+import { apiOptions } from "./config/apiOptions";
+import axios from "axios";
+import { getPlayerUrl } from "./config/apiUrls";
+
+const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
+  dispatch({ type: "PLAYERS_FETCH_INIT" });
+
+  try {
+    const url = getPlayerUrl(searchTerm, teamId, page);
+    console.log("Fetching players with URL:", url); // Log the URL
+    const result = await axios.get(url, apiOptions);
+    console.log("API response:", result.data); // Log the API response
+    dispatch({
+      type: "PLAYERS_FETCH_SUCCESS",
+      payload: {
+        list: result.data.response,
+        page: result.data.paging.current,
+      },
+    });
+  } catch (error) {
+    console.error("API fetch error:", error); // Log any errors
+    dispatch({ type: "PLAYERS_FETCH_FAILURE" });
+  }
+};
 
 const App = () => {
   //we've basically added a reachedBottom state to track if the user has reached the bottom of the page and then debounced our checkScrollPosition function to run every 200ms. This way, we can avoid calling the function too frequently and causing performance issues.
