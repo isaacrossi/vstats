@@ -16,6 +16,7 @@ export const playersReducer = (state, action) => {
             ? action.payload.list
             : state.data.concat(action.payload.list),
         page: action.payload.page,
+        totalPage: action.payload.totalPage,
       };
     case `PLAYERS_FETCH_FAILURE`:
       return {
@@ -28,6 +29,7 @@ export const playersReducer = (state, action) => {
         ...state,
         data: [],
         page: 1,
+        totalPage: null,
       };
     default:
       throw new Error();

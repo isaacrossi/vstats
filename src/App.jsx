@@ -22,6 +22,7 @@ const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
       payload: {
         list: result.data.response,
         page: result.data.paging.current,
+        totalPage: result.data.paging.total,
       },
     });
   } catch (error) {
@@ -41,6 +42,7 @@ const App = () => {
   const [players, dispatchPlayers] = useReducer(playersReducer, {
     data: [],
     page: 1,
+    totalPage: null,
     isLoading: false,
     isError: false,
   });
@@ -58,7 +60,7 @@ const App = () => {
       setHasReachedBottom(true); // Prevent further fetches
       handleMore();
     }
-  }, 200); // Debounce with 200ms delay
+  }, 500); // Debounce with 200ms delay
 
   // Handle scroll and resize events
   useEffect(() => {
@@ -76,7 +78,7 @@ const App = () => {
 
   // Function to handle fetching more players
   const handleMore = () => {
-    if (!players.isLoading && players.page <= 19) {
+    if (!players.isLoading && players.page <= players.totalPage) {
       fetchPlayers(
         players.page + 1,
         submittedSearchTerm,
