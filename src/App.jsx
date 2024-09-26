@@ -1,11 +1,11 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { debounce } from "lodash";
 import { playersReducer } from "./reducers/playersReducer";
 import { Dropdown } from "./components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "./data/teams";
 import { fetchPlayers } from "./utils/fetchPlayers";
+import { checkScrollPosition } from "./utils/scrollUtils";
 
 const App = () => {
   //we've basically added a reachedBottom state to track if the user has reached the bottom of the page and then debounced our checkScrollPosition function to run every 200ms. This way, we can avoid calling the function too frequently and causing performance issues.
@@ -23,27 +23,15 @@ const App = () => {
     isError: false,
   });
 
-  console.log("total plauers", players.totalPage);
-
-  // Function to check if the user has scrolled to the bottom
-  const checkScrollPosition = debounce(() => {
-    const buffer = 100; // Buffer to trigger early
-    const viewportHeight = window.innerHeight;
-    const scrollY = window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-    const isScrollNearEnd = viewportHeight + scrollY + buffer >= documentHeight;
-
-    if (isScrollNearEnd && !players.isLoading && !hasReachedBottom) {
-      console.log("Reached bottom, fetching more players...");
-      setHasReachedBottom(true); // Prevent further fetches
-      fetchMorePlayers();
-    }
-  }, 500); // Debounce with 200ms delay
-
   // Handle scroll and resize events
   useEffect(() => {
     const handleScroll = () => {
-      checkScrollPosition(); // Check scroll position directly
+      checkScrollPosition(
+        fetchMorePlayers,
+        players,
+        setHasReachedBottom,
+        hasReachedBottom
+      ); // Check scroll position directly
     };
 
     window.addEventListener("scroll", handleScroll);
