@@ -36,7 +36,7 @@ const App = () => {
     if (isScrollNearEnd && !players.isLoading && !hasReachedBottom) {
       console.log("Reached bottom, fetching more players...");
       setHasReachedBottom(true); // Prevent further fetches
-      handleMore();
+      fetchMorePlayers();
     }
   }, 500); // Debounce with 200ms delay
 
@@ -55,7 +55,7 @@ const App = () => {
   }, [players.isLoading, hasReachedBottom]); // Only reattach if loading state or bottom state changes
 
   // Function to handle fetching more players
-  const handleMore = () => {
+  const fetchMorePlayers = () => {
     if (!players.isLoading && players.page < players.totalPage) {
       fetchPlayers(
         players.page + 1,

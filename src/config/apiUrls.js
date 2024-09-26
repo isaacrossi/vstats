@@ -2,7 +2,6 @@ export const API_BASE_URL = "https://api-football-v1.p.rapidapi.com/v3";
 
 // Endpoints
 const API_PLAYERS = "/players";
-const API_TEAMS = "/teams";
 
 // Parameters
 const PARAM_LEAGUE = "league=188";
