@@ -91,6 +91,7 @@ const App = () => {
       setSelectedTeamId(item.id);
       fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers);
       searchTerm && setSearchTerm("");
+      setHasReachedBottom(false); // Reset bottom state
     }
   };
 
