@@ -1,27 +1,23 @@
-import React, { useState, useReducer, useEffect } from "react";
-import { playersReducer } from "./reducers/playersReducer";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "./components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "./data/teams";
 import { fetchPlayers } from "./utils/fetchPlayers";
 import { monitorScrollForInfiniteFetching } from "./utils/scrollUtils";
+import { usePlayers } from "./hooks/usePlayers";
 
 const App = () => {
-  //we've basically added a reachedBottom state to track if the user has reached the bottom of the page and then debounced our checkScrollPosition function to run every 200ms. This way, we can avoid calling the function too frequently and causing performance issues.
-
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState(0);
-  const [hasReachedBottom, setHasReachedBottom] = useState(false); // Track if bottom is reached
+  const [hasReachedBottom, setHasReachedBottom] = useState(false);
 
-  const [players, dispatchPlayers] = useReducer(playersReducer, {
-    data: [],
-    page: 1,
-    totalPage: null,
-    isLoading: false,
-    isError: false,
-  });
+  const [players, dispatchPlayers, fetchMorePlayers] = usePlayers(
+    selectedTeamId,
+    submittedSearchTerm,
+    setHasReachedBottom
+  );
 
   useEffect(() => {
     monitorScrollForInfiniteFetching(
@@ -30,21 +26,7 @@ const App = () => {
       setHasReachedBottom,
       hasReachedBottom
     );
-  }, [players.isLoading, hasReachedBottom]); // Only reattach if loading state or bottom state changes
-
-  // Function to handle fetching more players
-  const fetchMorePlayers = () => {
-    if (!players.isLoading && players.page < players.totalPage) {
-      fetchPlayers(
-        players.page + 1,
-        submittedSearchTerm,
-        selectedTeamId,
-        dispatchPlayers
-      ).then(() => {
-        setHasReachedBottom(false); // Allow fetching again once new data is loaded
-      });
-    }
-  };
+  }, [players.isLoading, hasReachedBottom]);
 
   const handleSearchCancel = () => {
     setSearchTerm("");
@@ -54,7 +36,6 @@ const App = () => {
     fetchPlayers(1, "", 0, dispatchPlayers);
   };
 
-  // Function to handle search form submission
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     dispatchPlayers({ type: "PLAYERS_RESET" });
@@ -62,7 +43,6 @@ const App = () => {
     fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
   };
 
-  // Function to handle dropdown selection
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
       dispatchPlayers({ type: "PLAYERS_RESET" });
@@ -74,7 +54,6 @@ const App = () => {
     }
   };
 
-  // Initial fetch for players when component mounts or dependencies change
   useEffect(() => {
     fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
   }, []);
