@@ -1,7 +1,7 @@
 import { debounce } from "lodash";
 
 // Function to check if the user has scrolled to the bottom
-export const checkScrollPosition = debounce(
+const checkScrollPosition = debounce(
   (callback, list, setHasReachedBottom, hasReachedBottom) => {
     const buffer = 100; // Buffer to trigger early
     const viewportHeight = window.innerHeight;
@@ -17,3 +17,19 @@ export const checkScrollPosition = debounce(
   },
   500
 );
+
+export const monitorScrollForInfiniteFetching = (
+  callback,
+  list,
+  setHasReachedBottom,
+  hasReachedBottom
+) => {
+  const scrollListener = () => {
+    checkScrollPosition(callback, list, setHasReachedBottom, hasReachedBottom);
+  };
+  window.addEventListener("scroll", scrollListener);
+
+  return () => {
+    window.removeEventListener("scroll", scrollListener);
+  };
+};

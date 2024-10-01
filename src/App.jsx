@@ -5,7 +5,7 @@ import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "./data/teams";
 import { fetchPlayers } from "./utils/fetchPlayers";
-import { checkScrollPosition } from "./utils/scrollUtils";
+import { monitorScrollForInfiniteFetching } from "./utils/scrollUtils";
 
 const App = () => {
   //we've basically added a reachedBottom state to track if the user has reached the bottom of the page and then debounced our checkScrollPosition function to run every 200ms. This way, we can avoid calling the function too frequently and causing performance issues.
@@ -23,23 +23,13 @@ const App = () => {
     isError: false,
   });
 
-  // Handle scroll and resize events
   useEffect(() => {
-    const handleScroll = () => {
-      checkScrollPosition(
-        fetchMorePlayers,
-        players,
-        setHasReachedBottom,
-        hasReachedBottom
-      ); // Check scroll position directly
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Cleanup the event listeners on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    monitorScrollForInfiniteFetching(
+      fetchMorePlayers,
+      players,
+      setHasReachedBottom,
+      hasReachedBottom
+    );
   }, [players.isLoading, hasReachedBottom]); // Only reattach if loading state or bottom state changes
 
   // Function to handle fetching more players
@@ -75,10 +65,10 @@ const App = () => {
   // Function to handle dropdown selection
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
+      searchTerm && setSearchTerm("");
       dispatchPlayers({ type: "PLAYERS_RESET" });
       setSelectedTeamId(item.id);
       fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers);
-      searchTerm && setSearchTerm("");
       setHasReachedBottom(false); // Reset bottom state
     }
   };
