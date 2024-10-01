@@ -65,10 +65,11 @@ const App = () => {
   // Function to handle dropdown selection
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
-      searchTerm && setSearchTerm("");
       dispatchPlayers({ type: "PLAYERS_RESET" });
+      searchTerm && setSearchTerm("");
+      setSubmittedSearchTerm("");
       setSelectedTeamId(item.id);
-      fetchPlayers(1, submittedSearchTerm, item.id, dispatchPlayers);
+      fetchPlayers(1, "", item.id, dispatchPlayers);
       setHasReachedBottom(false); // Reset bottom state
     }
   };
@@ -76,7 +77,7 @@ const App = () => {
   // Initial fetch for players when component mounts or dependencies change
   useEffect(() => {
     fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
-  }, [searchTerm, selectedTeamId]);
+  }, []);
 
   return (
     <div className="bg-blue-1000 pb-28">
