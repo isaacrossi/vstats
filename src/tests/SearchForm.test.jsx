@@ -52,6 +52,13 @@ describe("SearchForm", () => {
       screen.getByRole("button", { name: "Submit search" })
     ).toBeDisabled();
   });
+
+  it("enables the search button when the search term length is 4 or more characters", () => {
+    render(<SearchForm {...searchFormProps} searchTerm="test" />);
+    expect(
+      screen.getByRole("button", { name: "Submit search" })
+    ).not.toBeDisabled();
+  });
 });
 
 describe("InputWithLabel", () => {
