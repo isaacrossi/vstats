@@ -1,14 +1,43 @@
-import { describe, it, expect } from "vitest";
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
+import { players } from "./dummyPlayers";
+import axios from "axios";
+import { describe, vi, it, expect } from "vitest";
+import { App } from "../App";
 
-//describe block is our test suite
-//Note: tests can be used without suites
-describe("something truthy and falsy", () => {
-  //it blocks are out test cases
-  it("true to be true", () => {
-    expect(true).toBeTruthy();
-  });
+vi.mock("axios");
 
-  it("fasle to be false", () => {
-    expect(false).toBeFalsy();
+vi.mock("axios");
+
+describe("App", () => {
+  it("succeeds fetching data", async () => {
+    const promise = Promise.resolve({
+      data: {
+        response: players.response, // Use the response array containing playerOne and playerTwo
+        paging: players.paging, // Use the paging information
+      },
+    });
+
+    axios.get.mockImplementationOnce(() => promise);
+
+    render(<App />);
+
+    // Ensure the "Loading" text is in the document at first
+    expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+
+    // Wait for the "Loading" text to disappear
+    await waitForElementToBeRemoved(() => screen.queryByText(/Loading/));
+
+    // Ensure axios promise resolves
+    await waitFor(async () => await promise);
+
+    screen.debug();
+
+    expect(screen.getByText("J. Bidois")).toBeInTheDocument();
+    expect(screen.getByText("A. Smith")).toBeInTheDocument();
   });
 });

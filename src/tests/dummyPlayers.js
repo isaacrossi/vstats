@@ -188,4 +188,10 @@ const playerTwo = {
   ],
 };
 
-export const players = [playerOne, playerTwo];
+export const players = {
+  response: [playerOne, playerTwo], // Wrap players in a response array
+  paging: {
+    current: 1, // Current page number
+    total: 1, // Total number of pages (for example, you can set this dynamically)
+  },
+};

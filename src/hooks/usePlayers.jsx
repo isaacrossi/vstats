@@ -32,6 +32,8 @@ const playersReducer = (state, action) => {
         ...state,
         data: [],
         page: 1,
+        isLoading: false,
+        isError: false,
         totalPage: null,
       };
     default:

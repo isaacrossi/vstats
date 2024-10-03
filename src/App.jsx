@@ -7,7 +7,7 @@ import { fetchPlayers } from "./utils/fetchPlayers";
 import { monitorScrollForInfiniteFetching } from "./utils/scrollUtils";
 import { usePlayers } from "./hooks/usePlayers";
 
-const App = () => {
+export const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState(0);
