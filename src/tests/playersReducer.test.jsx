@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { playersReducer } from "../reducers/playersReducer";
+import { playersReducer } from "../hooks/usePlayers";
 import { players } from "./dummyPlayers";
 
 describe("playersReducer", () => {
@@ -30,6 +30,7 @@ describe("playersReducer", () => {
       payload: {
         list: players,
         page: 1,
+        totalPage: 20,
       },
     };
     const state = {
@@ -37,6 +38,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: true,
       isError: false,
+      totalPage: null,
     };
 
     const newState = playersReducer(state, action);
@@ -46,6 +48,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: false,
       isError: false,
+      totalPage: 20,
     };
 
     expect(newState).toEqual(expectedState);
@@ -58,6 +61,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: true,
       isError: false,
+      totalPage: null,
     };
 
     const newState = playersReducer(state, action);
@@ -67,6 +71,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: false,
       isError: true,
+      totalPage: null,
     };
 
     expect(newState).toEqual(expectedState);
@@ -79,6 +84,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: false,
       isError: false,
+      totalPage: 20,
     };
 
     const newState = playersReducer(state, action);
@@ -88,6 +94,7 @@ describe("playersReducer", () => {
       page: 1,
       isLoading: false,
       isError: false,
+      totalPage: null,
     };
 
     expect(newState).toEqual(expectedState);

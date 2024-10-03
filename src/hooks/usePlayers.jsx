@@ -39,7 +39,7 @@ const playersReducer = (state, action) => {
   }
 };
 
-export const usePlayers = (
+const usePlayers = (
   selectedTeamId,
   submittedSearchTerm,
   setHasReachedBottom
@@ -67,3 +67,5 @@ export const usePlayers = (
 
   return [players, dispatchPlayers, fetchMorePlayers];
 };
+
+export { usePlayers, playersReducer };
