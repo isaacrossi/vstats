@@ -59,6 +59,11 @@ describe("SearchForm", () => {
       screen.getByRole("button", { name: "Submit search" })
     ).not.toBeDisabled();
   });
+
+  it("renders snapshot", () => {
+    const { container } = render(<SearchForm {...searchFormProps} />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });
 
 describe("InputWithLabel", () => {
