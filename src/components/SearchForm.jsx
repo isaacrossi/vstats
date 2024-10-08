@@ -8,7 +8,11 @@ const SearchForm = ({
   onSearchSubmit,
   onSearchCancel,
 }) => (
-  <form onSubmit={onSearchSubmit} className="mb-6 relative max-w-80 h-auto">
+  <form
+    onSubmit={onSearchSubmit}
+    role="form"
+    className="mb-6 relative max-w-80 h-auto"
+  >
     <InputWithLabel
       id="search"
       label="Search"

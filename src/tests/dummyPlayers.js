@@ -188,6 +188,101 @@ const playerTwo = {
   ],
 };
 
+export const anotherPlayer = {
+  player: {
+    id: 444110,
+    name: "G. Colli",
+    firstname: "Giovanni",
+    lastname: "Colli",
+    age: 25,
+    birth: {
+      date: "1996-05-15",
+      place: "Rome",
+      country: "Italy",
+    },
+    nationality: "Italy",
+    height: "175 cm",
+    weight: "70 kg",
+    injured: false,
+    photo: "https://media.api-sports.io/football/players/444110.png",
+  },
+  statistics: [
+    {
+      team: {
+        id: 24610,
+        name: "Roma",
+        logo: "https://media.api-sports.io/football/teams/24610.png",
+      },
+      league: {
+        id: 188,
+        name: "Serie A",
+        country: "Italy",
+        logo: "https://media.api-sports.io/football/leagues/188.png",
+        flag: "https://media.api-sports.io/flags/it.svg",
+      },
+      games: {
+        appearences: 15,
+        lineups: 10,
+        minutes: 900,
+        number: 8,
+        position: "Midfielder",
+        rating: "7.8",
+        captain: false,
+      },
+      substitutes: {
+        in: 5,
+        out: 3,
+        bench: 2,
+      },
+      shots: {
+        total: 20,
+        on: 10,
+      },
+      goals: {
+        total: 5,
+        conceded: 0,
+        assists: 3,
+        saves: 0,
+      },
+      passes: {
+        total: 400,
+        key: 30,
+        accuracy: "90%",
+      },
+      tackles: {
+        total: 25,
+        blocks: 5,
+        interceptions: 15,
+      },
+      duels: {
+        total: 60,
+        won: 40,
+      },
+      dribbles: {
+        attempts: 30,
+        success: 20,
+        past: 10,
+      },
+      fouls: {
+        drawn: 15,
+        committed: 10,
+      },
+      cards: {
+        yellow: 2,
+        yellowred: 0,
+        red: 0,
+      },
+      penalty: {
+        won: 2,
+        commited: 0,
+        scored: 2,
+        missed: 0,
+        saved: 0,
+      },
+    },
+  ],
+};
+
 export const players = {
   response: [playerOne, playerTwo], // Wrap players in a response array
   paging: {
