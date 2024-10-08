@@ -40,4 +40,21 @@ describe("App", () => {
     expect(screen.getByText("J. Bidois")).toBeInTheDocument();
     expect(screen.getByText("A. Smith")).toBeInTheDocument();
   });
+
+  it("fails fetching data", async () => {
+    const promise = Promise.reject();
+
+    axios.get.mockImplementationOnce(() => promise);
+
+    render(<App />);
+
+    expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+
+    try {
+      await waitFor(async () => await promise);
+    } catch (error) {
+      expect(screen.queryByText(/Loading/)).toBeNull();
+      expect(screen.getByText(/went wrong/)).toBeInTheDocument();
+    }
+  });
 });
