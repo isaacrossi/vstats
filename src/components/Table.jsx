@@ -1,6 +1,7 @@
 import { shortenTeamName } from "../utils/shortenTeamName";
 import { countries } from "../data/countries";
 import { headers } from "../data/headers";
+import { Link } from "react-router-dom";
 
 const Table = ({ list }) => (
   <table className="mt-14 mx-auto">
@@ -19,7 +20,9 @@ const TableRow = ({ item, isHeader = false }) => (
       ))
     ) : (
       <>
-        <TableCell>{item.player.name}</TableCell>
+        <TableCell>
+          <Link to={`/details/${item.player.id}`}>{item.player.name}</Link>
+        </TableCell>
         <TableCell className="flex w-56">
           <img
             className="w-6 h-6 mr-2"

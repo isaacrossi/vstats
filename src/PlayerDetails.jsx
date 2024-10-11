@@ -1,3 +1,9 @@
-const PlayerDetails = () => <h1>Player Name</h1>;
+import { useParams } from "react-router-dom";
+
+const PlayerDetails = () => {
+  const { id } = useParams();
+
+  return <h1>{id}</h1>;
+};
 
 export default PlayerDetails;
