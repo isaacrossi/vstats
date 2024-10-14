@@ -9,8 +9,9 @@ const PARAM_SEASON = "season=2024";
 const PARAM_SEARCH = "search=";
 const PARAM_TEAM = "team=";
 const PARAM_PAGE = "page=";
+const PARAM_PLAYER_ID = "id=";
 
-export const getPlayerUrl = (searchTerm, teamId, page = 1) => {
+export const getPlayersUrl = (searchTerm, teamId, page = 1) => {
   let url = `${API_BASE_URL}${API_PLAYERS}?${PARAM_LEAGUE}&${PARAM_SEASON}&${PARAM_PAGE}${page}`;
 
   if (searchTerm) {
@@ -20,4 +21,8 @@ export const getPlayerUrl = (searchTerm, teamId, page = 1) => {
   }
 
   return url;
+};
+
+export const getPlayerUrl = (id) => {
+  return `${API_BASE_URL}${API_PLAYERS}?${PARAM_PLAYER_ID}${id}&${PARAM_SEASON}`;
 };
