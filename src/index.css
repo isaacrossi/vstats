@@ -21,3 +21,8 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px #ffffff; /* Adjust the color and width as needed */
+}
