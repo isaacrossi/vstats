@@ -1,4 +1,7 @@
 export const cmToFeetAndInches = (height) => {
+  if (!height) {
+    return "n/a";
+  }
   const cm = parseInt(height.split("cm")[0], 10);
   const totalInches = cm / 2.54;
   const feet = Math.floor(totalInches / 12);

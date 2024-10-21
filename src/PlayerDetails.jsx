@@ -98,7 +98,9 @@ const PlayerDetails = () => {
                         Weight
                       </h3>
                       <p className="text-base uppercase text-slate-50">
-                        {player.statistics[0].games.position}
+                        {player.player.weight
+                          ? `${player.player.weight}`
+                          : "n/a"}
                       </p>
                     </li>
                     <li className="mb-4">
