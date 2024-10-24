@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import PlayerDetails from "./pages/PlayerDetails/PlayerDetails";
-import Players from "./pages/Players/Players";
+import PlayerDetails from "./pages/PlayerDetails/index";
+import Players from "./pages/Players/index";
 
 const App = () => {
   return (
