@@ -1,6 +1,6 @@
-import { shortenTeamName } from "../utils/shortenTeamName";
-import { countries } from "../data/countries";
-import { headers } from "../data/headers";
+import { shortenTeamName } from "../../../utils/shortenTeamName";
+import { countries } from "../../../data/countries";
+import { headers } from "../../../data/headers";
 import { Link } from "react-router-dom";
 
 const Table = ({ list }) => (

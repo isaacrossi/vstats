@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Dropdown } from "./components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
-import { teams } from "./data/teams";
-import { fetchPlayers } from "./utils/fetchPlayers";
-import { monitorScrollForInfiniteFetching } from "./utils/scrollUtils";
-import { usePlayers } from "./hooks/usePlayers";
+import { teams } from "../../data/teams";
+import { fetchPlayers } from "../../utils/fetchPlayers";
+import { monitorScrollForInfiniteFetching } from "../../utils/scrollUtils";
+import { usePlayers } from "../../hooks/usePlayers";
 
 export const Players = () => {
   const [searchTerm, setSearchTerm] = useState("");

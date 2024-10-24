@@ -1,8 +1,8 @@
 // Importing necessary hooks and components
 import { useRef, useState } from "react";
-import useOutsideClick from "../hooks/useOutsideClick"; // Custom hook to handle outside click events
+import useOutsideClick from "../../../hooks/useOutsideClick"; // Custom hook to handle outside click
 import { GoChevronDown } from "react-icons/go"; // Chevron down icon from react-icons library
-import { shortenTeamName } from "../utils/shortenTeamName"; // Utility function to shorten team names
+import { shortenTeamName } from "../../../utils/shortenTeamName"; // Function to shorten team name
 
 // Dropdown component definition
 const Dropdown = ({
