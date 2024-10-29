@@ -55,12 +55,12 @@ const HeaderWithDetails = ({ data }) => (
 const ImageWithLogo = ({ data }) => (
   <div className="relative w-1/3 h-fit">
     <img
-      className="w-full rounded-full"
+      className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-full"
       src={data.player.photo}
       alt={`${data.player.firstname} ${data.player.lastname}`}
     />
     <img
-      className="absolute w-32 h-32 top-2/3 left-[-19%]"
+      className="absolute max-w-[25%] top-3/4 left-[-5%] shadow-2xl" // adjusts based on container size
       src={data.statistics[0].team.logo}
       alt={`${data.statistics[0].team.name} logo`}
     />
@@ -69,14 +69,14 @@ const ImageWithLogo = ({ data }) => (
 
 const ListItem = ({ title, children }) => (
   <li className="mb-4">
-    <h3 className="text-s text-slate-500 uppercase mb-2">{title}</h3>
+    <h3 className="text-s font-bold text-slate-500 uppercase mb-2">{title}</h3>
     <p className="text-base uppercase text-slate-50">{children}</p>
   </li>
 );
 
 const ListItemWithImage = ({ title, imgSrc, imgAlt, children }) => (
   <li className="mb-4">
-    <h3 className="text-s text-slate-500 uppercase mb-2">{title}</h3>
+    <h3 className="text-s font-bold text-slate-500 uppercase mb-2">{title}</h3>
     <div className="flex items-center">
       <img className="w-6 h-6 mr-2" src={imgSrc} alt={imgAlt} />
       <p className="text-base uppercase text-slate-50">{children}</p>
