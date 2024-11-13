@@ -2,17 +2,17 @@ import { countries } from "../../../data/countries";
 import { cmToFeetAndInches } from "../../../utils/cmToFeetAndInches";
 
 const HeaderWithDetails = ({ data }) => (
-  <header className="pt-28 pb-14 bg-blue-diagonal bg-contain bg-no-repeat">
-    <div className="flex justify-between">
+  <header className="pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-contain bg-no-repeat">
+    <div className="flex-col-reverse md:flex-row flex justify-between">
       <div className="flex flex-col w-full">
-        <h2 className="font-heading text-4xl text-slate-50 uppercase mb-1">
+        <h2 className="font-heading text-3xl lg:text-4xl text-slate-50 uppercase mb-1">
           {data.player.firstname}
         </h2>
-        <h1 className="font-heading text-6xl text-outline uppercase mb-12">
+        <h1 className="font-heading text-5xl lg:text-6xl text-outline uppercase mb-12 lg:mb-16">
           {data.player.lastname}
         </h1>
-        <div className="grid grid-cols-8">
-          <ul className="col-span-4">
+        <div className="md:grid md:grid-cols-8">
+          <ul className="md:col-span-4">
             <ListItem title="Role">
               {data.statistics[0].games.position}
             </ListItem>
@@ -53,7 +53,7 @@ const HeaderWithDetails = ({ data }) => (
 );
 
 const ImageWithLogo = ({ data }) => (
-  <div className="relative w-1/3 h-fit">
+  <div className="relative mx-auto w-1/2 mb-12 md:mb-0 md:w-1/3 md:h-fit">
     <img
       className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-full"
       src={data.player.photo}
@@ -68,18 +68,24 @@ const ImageWithLogo = ({ data }) => (
 );
 
 const ListItem = ({ title, children }) => (
-  <li className="mb-4">
-    <h3 className="text-s font-bold text-slate-500 uppercase mb-2">{title}</h3>
-    <p className="text-base uppercase text-slate-50">{children}</p>
+  <li className="flex justify-between md:justify-normal md:flex-col mb-4 md:last:mb-0">
+    <h3 className="text-sm lg:text-base font-bold text-slate-500 uppercase mb-2">
+      {title}
+    </h3>
+    <p className="text-sm lg:text-base uppercase text-slate-50 py-0.5">
+      {children}
+    </p>
   </li>
 );
 
 const ListItemWithImage = ({ title, imgSrc, imgAlt, children }) => (
-  <li className="mb-4">
-    <h3 className="text-s font-bold text-slate-500 uppercase mb-2">{title}</h3>
+  <li className="flex justify-between md:justify-normal md:flex-col mb-4 md:last:mb-0">
+    <h3 className="text-sm lg:text-base font-bold text-slate-500 uppercase mb-2">
+      {title}
+    </h3>
     <div className="flex items-center">
       <img className="w-6 h-6 mr-2" src={imgSrc} alt={imgAlt} />
-      <p className="text-base uppercase text-slate-50">{children}</p>
+      <p className="text-sm lg:text-base uppercase text-slate-50">{children}</p>
     </div>
   </li>
 );

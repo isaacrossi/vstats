@@ -31,12 +31,13 @@ const PlayerDetails = () => {
   }, [id]);
 
   return (
-    <main className="container mx-auto">
+    <main className="container mx-auto px-5">
       {loading ? (
         <p className="text-slate-50">Loading...</p>
       ) : (
         <HeaderWithDetails data={player} />
       )}
+      <hr className="border-slate-600" />
     </main>
   );
 };
