@@ -68,7 +68,7 @@ const ImageWithLogo = ({ data }) => (
 );
 
 const ListItem = ({ title, children }) => (
-  <li className="flex justify-between md:justify-normal md:flex-col mb-4 md:last:mb-0">
+  <li className="flex justify-between md:justify-normal md:flex-col mb-4 last:mb-0">
     <h3 className="text-sm lg:text-base font-bold text-slate-500 uppercase mb-2">
       {title}
     </h3>
