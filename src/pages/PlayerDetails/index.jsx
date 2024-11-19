@@ -40,31 +40,51 @@ const PlayerDetails = () => {
 
       <hr className="border-slate-600 mb-12" />
 
-      <div className="w-full lg:w-1/4 float-right text-sm text-slate-50 uppercase px-4 py-8 border-t-4 border-t-red-600 border-r border-l border-b border-slate-600">
+      <div className="w-full md:w-1/3 ld:w-1/4 float-right text-sm text-slate-50 uppercase px-4 py-8 border-t-4 border-t-red-600 border-r border-l border-b border-slate-600">
         <h3 className="font-heading text-slate-50 text-xl uppercase mb-8">
           Quick stats
         </h3>
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
-          <p>Appearances</p>
-          <p>32</p>
+          <p>Appearences</p>
+          <p>
+            {player?.statistics[0]?.games?.appearences === null
+              ? "0"
+              : player?.statistics[0]?.games?.appearences}
+          </p>
         </div>
 
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
           <p>Minutes</p>
-          <p>415</p>
+          <p>
+            {player?.statistics[0]?.games?.minutes === null
+              ? "0"
+              : player?.statistics[0]?.games?.minutes}
+          </p>
         </div>
 
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
           <p>Goals</p>
-          <p>4</p>
+          <p>
+            {player?.statistics[0]?.goals?.total === null
+              ? "0"
+              : player?.statistics[0]?.goals?.total}
+          </p>
         </div>
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
           <p>Assists</p>
-          <p>1</p>
+          <p>
+            {player?.statistics[0]?.goals?.assists === null
+              ? "0"
+              : player?.statistics[0]?.goals?.assists}
+          </p>
         </div>
         <div className="flex justify-between">
           <p>Rating</p>
-          <p>6.5</p>
+          <p>
+            {player?.statistics[0]?.games?.rating === null
+              ? "0"
+              : player?.statistics[0]?.games?.rating}
+          </p>
         </div>
       </div>
     </main>
