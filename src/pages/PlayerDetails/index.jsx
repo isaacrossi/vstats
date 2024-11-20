@@ -40,8 +40,8 @@ const PlayerDetails = () => {
 
       <hr className="border-slate-600 mb-12" />
 
-      <div className="w-full md:w-1/3 ld:w-1/4 float-right text-sm text-slate-50 uppercase px-4 py-8 border-t-4 border-t-red-600 border-r border-l border-b border-slate-600">
-        <h3 className="font-heading text-slate-50 text-xl uppercase mb-8">
+      <div className="w-full md:w-1/3  float-right text-sm lg:text-base text-slate-50 uppercase px-4 py-8 border-t-4 border-t-red-600 border-r border-l border-b border-slate-600">
+        <h3 className="font-heading text-slate-50 text-xl lg:text-2xl uppercase mb-8">
           Quick stats
         </h3>
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">

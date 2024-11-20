@@ -45,7 +45,7 @@ const Dropdown = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex align-center justify-between w-64 py-2 bg-transparent border-b border-red-600 text-slate-50"
       >
-        <span className="flex">
+        <span className="flex text-sm lg:text-base">
           {selectedItemId !== 0 && selectedItem && (
             <img
               className="mr-2 h-6 w-6"
@@ -84,7 +84,9 @@ const Dropdown = ({
                     loading="lazy"
                   />
                 )}
-                <span>{shortenTeamName(item?.name)}</span>
+                <span className="text-sm lg:text-base">
+                  {shortenTeamName(item?.name)}
+                </span>
               </li>
             ))}
           </ul>

@@ -4,7 +4,7 @@ import { headers } from "../../../data/headers";
 import { Link } from "react-router-dom";
 
 const Table = ({ list }) => (
-  <table className="mt-14 mx-auto">
+  <table className="mt-14 mx-auto text-sm lg:text-base">
     {list.length !== 0 && <TableHeader />}
     <TableBody list={list} />
   </table>
@@ -23,7 +23,7 @@ const TableRow = ({ item, isHeader = false }) => (
         <TableCell>
           <Link to={`/details/${item.player.id}`}>{item.player.name}</Link>
         </TableCell>
-        <TableCell className="flex w-56">
+        <TableCell className="flex">
           <img
             className="w-6 h-6 mr-2"
             src={item.statistics[0].team.logo}
@@ -31,7 +31,7 @@ const TableRow = ({ item, isHeader = false }) => (
           />
           {shortenTeamName(item.statistics[0].team.name)}
         </TableCell>
-        <TableCell className="flex w-56">
+        <TableCell className="flex ">
           <img
             className="h-5 w-auto mr-2"
             src={`https://flagsapi.com/${
@@ -41,9 +41,7 @@ const TableRow = ({ item, isHeader = false }) => (
           />
           {item.player.nationality}
         </TableCell>
-        <TableCell className="w-56">
-          {item.statistics[0].games.position}
-        </TableCell>
+        <TableCell>{item.statistics[0].games.position}</TableCell>
       </>
     )}
   </tr>
@@ -63,6 +61,6 @@ const TableBody = ({ list }) => (
   </tbody>
 );
 
-const TableCell = ({ children }) => <td className="flex w-56">{children}</td>;
+const TableCell = ({ children }) => <td className="flex">{children}</td>;
 
 export { Table, TableHeader, TableBody, TableRow };

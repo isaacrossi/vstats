@@ -61,8 +61,8 @@ export const Players = () => {
   return (
     <div className="bg-blue-1000 pb-28">
       <div className="container mx-auto">
-        <header className="h-1/2 pt-28 pb-14 bg-blue-diagonal bg-contain bg-no-repeat">
-          <h1 className="mb-12 font-heading text-4xl text-slate-50 uppercase">
+        <header className="h-1/2 pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-contain bg-no-repeat">
+          <h1 className="mb-12 font-heading text-3xl lg:text-4xl text-slate-50 uppercase">
             Players
           </h1>
 
