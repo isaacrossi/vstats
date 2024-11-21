@@ -4,24 +4,27 @@ import { headers } from "../../../data/headers";
 import { Link } from "react-router-dom";
 
 const Table = ({ list }) => (
-  <table className="mt-14 mx-auto text-sm lg:text-base">
+  <table className="w-full mt-14 mx-auto text-sm lg:text-base">
     {list.length !== 0 && <TableHeader />}
     <TableBody list={list} />
   </table>
 );
 
 const TableRow = ({ item, isHeader = false }) => (
-  <tr className="grid grid-cols-4 gap-x-32 p-5 text-s text-left uppercase text-slate-50 border-b border-red-600">
+  <tr className="grid grid-cols-7 gap-x-16 justify-between p-5 text-s text-left uppercase text-slate-50 border-b border-red-600">
     {isHeader ? (
       item.map((header, index) => (
-        <th key={index} className="text-slate-500">
+        <th
+          key={index}
+          className="text-slate-500 [&:nth-child(-n+3)]:col-span-2"
+        >
           {header}
         </th>
       ))
     ) : (
       <>
         <TableCell>
-          <Link to={`/details/${item.player.id}`}>{item.player.name}</Link>
+          <Link to={`/details/${item.player.id}`}>{item.player.lastname}</Link>
         </TableCell>
         <TableCell className="flex">
           <img
@@ -29,7 +32,9 @@ const TableRow = ({ item, isHeader = false }) => (
             src={item.statistics[0].team.logo}
             alt={`${item.statistics[0].team.name} logo`}
           />
-          {shortenTeamName(item.statistics[0].team.name)}
+          <p className="hidden md:inline">
+            {shortenTeamName(item.statistics[0].team.name)}
+          </p>
         </TableCell>
         <TableCell className="flex ">
           <img
@@ -39,9 +44,11 @@ const TableRow = ({ item, isHeader = false }) => (
             }/flat/64.png`}
             alt="country flag"
           />
-          {item.player.nationality}
+          <p className="hidden md:inline">{item.player.nationality}</p>
         </TableCell>
-        <TableCell>{item.statistics[0].games.position}</TableCell>
+        <TableCell className="justify-self-end">
+          {item.statistics[0].games.position}
+        </TableCell>
       </>
     )}
   </tr>
@@ -61,6 +68,8 @@ const TableBody = ({ list }) => (
   </tbody>
 );
 
-const TableCell = ({ children }) => <td className="flex">{children}</td>;
+const TableCell = ({ children }) => (
+  <td className="flex [&:nth-child(-n+3)]:col-span-2 ">{children}</td>
+);
 
 export { Table, TableHeader, TableBody, TableRow };
