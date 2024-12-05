@@ -2,7 +2,7 @@ import { countries } from "../../../data/countries";
 import { cmToFeetAndInches } from "../../../utils/cmToFeetAndInches";
 
 const HeaderWithDetails = ({ data }) => (
-  <header className="pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-contain bg-no-repeat">
+  <header className="pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
     <div className="flex-col-reverse md:flex-row flex justify-between">
       <div className="flex flex-col w-full">
         <h2 className="font-heading text-3xl lg:text-4xl text-slate-50 uppercase mb-1">
@@ -68,24 +68,26 @@ const ImageWithLogo = ({ data }) => (
 );
 
 const ListItem = ({ title, children }) => (
-  <li className="flex justify-between md:justify-normal md:flex-col mb-4 last:mb-0">
-    <h3 className="text-sm lg:text-base font-bold text-slate-500 uppercase mb-2">
+  <li className="flex justify-between md:justify-normal md:flex-col mb-6 last:mb-0">
+    <h3 className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
     </h3>
-    <p className="text-sm lg:text-base uppercase text-slate-50 py-0.5">
+    <p className="text-sm lg:text-base font-medium uppercase text-slate-50 py-0.5">
       {children}
     </p>
   </li>
 );
 
 const ListItemWithImage = ({ title, imgSrc, imgAlt, children }) => (
-  <li className="flex justify-between md:justify-normal md:flex-col mb-4 md:last:mb-0">
-    <h3 className="text-sm lg:text-base font-bold text-slate-500 uppercase mb-2">
+  <li className="flex justify-between md:justify-normal md:flex-col mb-6 md:last:mb-0">
+    <h3 className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
     </h3>
     <div className="flex items-center">
       <img className="w-6 h-6 mr-2" src={imgSrc} alt={imgAlt} />
-      <p className="text-sm lg:text-base uppercase text-slate-50">{children}</p>
+      <p className="text-sm lg:text-base uppercase font-medium text-slate-50">
+        {children}
+      </p>
     </div>
   </li>
 );

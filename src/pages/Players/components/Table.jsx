@@ -1,22 +1,23 @@
-import { shortenTeamName } from "../../../utils/shortenTeamName";
+import { shortenToTwo, shortenToOne } from "../../../utils/shortenTeamName";
+import { trimString } from "../../../utils/trimString";
 import { countries } from "../../../data/countries";
 import { headers } from "../../../data/headers";
 import { Link } from "react-router-dom";
 
 const Table = ({ list }) => (
-  <table className="w-full mt-14 mx-auto text-sm lg:text-base">
+  <table className="w-full mt-14 text-sm lg:text-base">
     {list.length !== 0 && <TableHeader />}
     <TableBody list={list} />
   </table>
 );
 
 const TableRow = ({ item, isHeader = false }) => (
-  <tr className="grid grid-cols-7 gap-x-16 justify-between p-5 text-s text-left uppercase text-slate-50 border-b border-red-600">
+  <tr className="grid grid-cols-7 justify-between p-5 text-s text-left uppercase text-slate-50 border-b border-red-600">
     {isHeader ? (
       item.map((header, index) => (
         <th
           key={index}
-          className="text-slate-500 [&:nth-child(-n+3)]:col-span-2"
+          className="text-slate-400 font-medium md:[&:nth-child(-n+3)]:col-span-2 first:col-span-3 [&:nth-child(2)]:col-span-2"
         >
           {header}
         </th>
@@ -32,8 +33,11 @@ const TableRow = ({ item, isHeader = false }) => (
             src={item.statistics[0].team.logo}
             alt={`${item.statistics[0].team.name} logo`}
           />
-          <p className="hidden md:inline">
-            {shortenTeamName(item.statistics[0].team.name)}
+          <p className="hidden lg:inline">
+            {shortenToTwo(item.statistics[0].team.name)}
+          </p>
+          <p className="lg:hidden">
+            {shortenToOne(item.statistics[0].team.name)}
           </p>
         </TableCell>
         <TableCell className="flex ">
@@ -47,7 +51,12 @@ const TableRow = ({ item, isHeader = false }) => (
           <p className="hidden md:inline">{item.player.nationality}</p>
         </TableCell>
         <TableCell className="justify-self-end">
-          {item.statistics[0].games.position}
+          <span className="hidden md:inline">
+            {item.statistics[0].games.position}
+          </span>
+          <span className="md:hidden">
+            {trimString(item.statistics[0].games.position)}
+          </span>
         </TableCell>
       </>
     )}
@@ -69,7 +78,9 @@ const TableBody = ({ list }) => (
 );
 
 const TableCell = ({ children }) => (
-  <td className="flex [&:nth-child(-n+3)]:col-span-2 ">{children}</td>
+  <td className="flex md:[&:nth-child(-n+3)]:col-span-2 first:col-span-3 [&:nth-child(2)]:col-span-2 font-medium">
+    {children}
+  </td>
 );
 
 export { Table, TableHeader, TableBody, TableRow };

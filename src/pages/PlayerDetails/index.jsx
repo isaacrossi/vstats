@@ -45,8 +45,8 @@ const PlayerDetails = () => {
           Quick stats
         </h3>
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
-          <p>Appearences</p>
-          <p>
+          <p className="text-slate-400 font-medium">Appearences</p>
+          <p className="font-bold">
             {player?.statistics[0]?.games?.appearences === null
               ? "0"
               : player?.statistics[0]?.games?.appearences}
@@ -54,8 +54,8 @@ const PlayerDetails = () => {
         </div>
 
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
-          <p>Minutes</p>
-          <p>
+          <p className="text-slate-400 font-medium">Minutes</p>
+          <p className="font-bold">
             {player?.statistics[0]?.games?.minutes === null
               ? "0"
               : player?.statistics[0]?.games?.minutes}
@@ -63,24 +63,24 @@ const PlayerDetails = () => {
         </div>
 
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
-          <p>Goals</p>
-          <p>
+          <p className="text-slate-400 font-medium">Goals</p>
+          <p className="font-bold">
             {player?.statistics[0]?.goals?.total === null
               ? "0"
               : player?.statistics[0]?.goals?.total}
           </p>
         </div>
         <div className="flex justify-between border-b border-slate-600 pb-2 mb-4">
-          <p>Assists</p>
-          <p>
+          <p className="text-slate-400 font-medium">Assists</p>
+          <p className="font-bold">
             {player?.statistics[0]?.goals?.assists === null
               ? "0"
               : player?.statistics[0]?.goals?.assists}
           </p>
         </div>
         <div className="flex justify-between">
-          <p>Rating</p>
-          <p>
+          <p className="text-slate-400 font-medium">Rating</p>
+          <p className="font-bold">
             {player?.statistics[0]?.games?.rating === null
               ? "0"
               : player?.statistics[0]?.games?.rating}

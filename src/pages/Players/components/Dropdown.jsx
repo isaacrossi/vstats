@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import useOutsideClick from "../../../hooks/useOutsideClick"; // Custom hook to handle outside click
 import { GoChevronDown } from "react-icons/go"; // Chevron down icon from react-icons library
-import { shortenTeamName } from "../../../utils/shortenTeamName"; // Function to shorten team name
+import { shortenToTwo } from "../../../utils/shortenTeamName"; // Function to shorten team name
 
 // Dropdown component definition
 const Dropdown = ({
@@ -53,7 +53,7 @@ const Dropdown = ({
               alt="selected item"
             />
           )}
-          {selectedItem ? shortenTeamName(selectedItem?.name) : title}
+          {selectedItem ? shortenToTwo(selectedItem?.name) : title}
         </span>
         <GoChevronDown
           size={20}
@@ -85,7 +85,7 @@ const Dropdown = ({
                   />
                 )}
                 <span className="text-sm lg:text-base">
-                  {shortenTeamName(item?.name)}
+                  {shortenToTwo(item?.name)}
                 </span>
               </li>
             ))}
