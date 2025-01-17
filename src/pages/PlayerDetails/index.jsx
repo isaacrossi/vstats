@@ -35,19 +35,23 @@ const PlayerDetails = () => {
     fetchPlayer(id, setPlayer, setLoading);
   }, [id]);
 
+  const aLeague = player?.statistics.find(
+    (stat) => stat.league?.name === "A-League"
+  );
+
   return (
     <main className="container mx-auto px-5">
       {loading ? (
         <p className="text-slate-50">Loading...</p>
       ) : (
-        <HeaderWithDetails data={player} />
+        <HeaderWithDetails statData={aLeague} playerData={player} />
       )}
 
       <hr className="border-slate-600 mb-12" />
 
       <div className="w-full md:w-1/3 float-right text-sm lg:text-base text-slate-50 uppercase px-4 py-8 border-t-4 border-t-red-600 border-r border-l border-b border-slate-600">
         <h3 className="font-heading text-slate-50 text-xl lg:text-2xl uppercase mb-8">
-          Quick stats
+          Quick Stats
         </h3>
         <ul>
           <li className="flex justify-between border-b border-slate-600 pb-2 mb-4">
@@ -55,11 +59,7 @@ const PlayerDetails = () => {
               <Apps className="w-6 h-6 mr-2" />
               <p className="text-slate-400 font-medium">Appearances</p>
             </div>
-            <p className="font-bold">
-              {player?.statistics[0]?.games?.appearences === null
-                ? "0"
-                : player?.statistics[0]?.games?.appearences}
-            </p>
+            <p className="font-bold">{aLeague?.games?.appearences || "0"}</p>
           </li>
 
           <li className="flex justify-between border-b border-slate-600 pb-2 mb-4">
@@ -67,12 +67,7 @@ const PlayerDetails = () => {
               <Minutes className="w-6 h-6 mr-2" />
               <p className="text-slate-400 font-medium">Minutes</p>
             </div>
-
-            <p className="font-bold">
-              {player?.statistics[0]?.games?.minutes === null
-                ? "0"
-                : player?.statistics[0]?.games?.minutes}
-            </p>
+            <p className="font-bold">{aLeague?.games?.minutes || "0"}</p>
           </li>
 
           <li className="flex justify-between border-b border-slate-600 pb-2 mb-4">
@@ -80,11 +75,7 @@ const PlayerDetails = () => {
               <Goals className="w-6 h-6 mr-2" />
               <p className="text-slate-400 font-medium">Goals</p>
             </div>
-            <p className="font-bold">
-              {player?.statistics[0]?.goals?.total === null
-                ? "0"
-                : player?.statistics[0]?.goals?.total}
-            </p>
+            <p className="font-bold">{aLeague?.goals?.total || "0"}</p>
           </li>
 
           <li className="flex justify-between border-b border-slate-600 pb-2 mb-4">
@@ -92,12 +83,7 @@ const PlayerDetails = () => {
               <Assists className="w-6 h-6 mr-2" />
               <p className="text-slate-400 font-medium">Assists</p>
             </div>
-
-            <p className="font-bold">
-              {player?.statistics[0]?.goals?.assists === null
-                ? "0"
-                : player?.statistics[0]?.goals?.assists}
-            </p>
+            <p className="font-bold">{aLeague?.goals?.assists || "0"}</p>
           </li>
 
           <li className="flex justify-between">
@@ -105,11 +91,7 @@ const PlayerDetails = () => {
               <Rating className="w-6 h-6 mr-2" />
               <p className="text-slate-400 font-medium">Rating</p>
             </div>
-            <p className="font-bold">
-              {player?.statistics[0]?.games?.rating === null
-                ? "0"
-                : player?.statistics[0]?.games?.rating}
-            </p>
+            <p className="font-bold">{aLeague?.games?.rating || "0"}</p>
           </li>
         </ul>
       </div>
