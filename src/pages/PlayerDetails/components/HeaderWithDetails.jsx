@@ -67,9 +67,9 @@ const ImageWithLogo = ({ playerData, statData }) => (
 
 const ListItem = ({ title, children }) => (
   <li className="flex justify-between md:justify-normal md:flex-col mb-6 last:mb-0">
-    <h3 className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
+    <span className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
-    </h3>
+    </span>
     <p className="text-sm lg:text-base font-medium uppercase text-slate-50 py-0.5">
       {children}
     </p>
@@ -78,9 +78,9 @@ const ListItem = ({ title, children }) => (
 
 const ListItemWithImage = ({ title, imgSrc, imgAlt, children }) => (
   <li className="flex justify-between md:justify-normal md:flex-col mb-6 md:last:mb-0">
-    <h3 className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
+    <span className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
-    </h3>
+    </span>
     <div className="flex items-center">
       <img className="w-6 h-6 mr-2" src={imgSrc} alt={imgAlt} />
       <p className="text-sm lg:text-base uppercase font-medium text-slate-50">
