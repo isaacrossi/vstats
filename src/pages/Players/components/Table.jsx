@@ -12,12 +12,16 @@ const Table = ({ list }) => (
 );
 
 const TableRow = ({ item, isHeader = false }) => (
-  <tr className="grid grid-cols-5 md:grid-cols-7 justify-between p-2 md:p-5 text-s text-left uppercase text-slate-50 border-b border-red-600 gap-x-4">
+  <tr
+    className={`grid grid-cols-5 md:grid-cols-7 justify-between p-2 md:p-5 text-left uppercase text-slate-900 gap-x-4 ${
+      isHeader ? "bg-slate-100 font-bold" : "even:bg-slate-50"
+    }`}
+  >
     {isHeader ? (
       item.map((header, index) => (
         <th
           key={index}
-          className="text-slate-400 font-medium md:[&:nth-child(-n+3)]:col-span-2 first:col-span-2 md:first:col-span-3 [&:nth-child(2)]:col-span-1 md:[&:nth-child(2)]:col-span-2 last:text-right last:md:text-left"
+          className="text-slate-900 font-bold md:[&:nth-child(-n+3)]:col-span-2 first:col-span-2 md:first:col-span-3 [&:nth-child(2)]:col-span-1 md:[&:nth-child(2)]:col-span-2 last:text-right last:md:text-left"
         >
           {header}
         </th>
