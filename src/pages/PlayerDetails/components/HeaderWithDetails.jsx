@@ -2,7 +2,7 @@ import { countries } from "../../../data/countries";
 import { cmToFeetAndInches } from "../../../utils/cmToFeetAndInches";
 
 const HeaderWithDetails = ({ statData, playerData }) => (
-  <header className="pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
+  <header className="pt-12 lg:pt-28 pb-14 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
     <div className="flex-col-reverse md:flex-row flex justify-between">
       <div className="flex flex-col w-full">
         <h2 className="font-heading text-3xl lg:text-4xl text-slate-50 uppercase mb-1">

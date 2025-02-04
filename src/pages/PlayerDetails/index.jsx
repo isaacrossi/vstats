@@ -36,17 +36,18 @@ const PlayerDetails = () => {
   );
 
   return (
-    <main className="container mx-auto px-5">
-      {loading ? (
-        <p className="text-slate-50">Loading...</p>
-      ) : (
-        <HeaderWithDetails statData={aLeague} playerData={player} />
-      )}
-
-      <hr className="border-slate-600 mb-12" />
-
-      <StatsPanel data={aLeague} />
-    </main>
+    <div className="bg-blue-1000 px-4">
+      <div className="container mx-auto">
+        {loading ? (
+          <p className="text-slate-50">Loading...</p>
+        ) : (
+          <>
+            <HeaderWithDetails statData={aLeague} playerData={player} />
+            <StatsPanel data={aLeague} />
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
