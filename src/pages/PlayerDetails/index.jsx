@@ -31,7 +31,11 @@ const PlayerDetails = () => {
     fetchPlayer(id, setPlayer, setLoading);
   }, [id]);
 
-  const aLeague = player?.statistics.find(
+  const findALeagueAndPlayed = player?.statistics.find(
+    (stat) => stat.league?.name === "A-League" && stat.games.appearences > 0
+  );
+
+  const findALeague = player?.statistics.find(
     (stat) => stat.league?.name === "A-League"
   );
 
@@ -42,8 +46,14 @@ const PlayerDetails = () => {
           <p className="text-slate-50">Loading...</p>
         ) : (
           <>
-            <HeaderWithDetails statData={aLeague} playerData={player} />
-            <StatsPanel data={aLeague} />
+            <h2>General</h2>
+            <HeaderWithDetails
+              statData={
+                findALeagueAndPlayed ? findALeagueAndPlayed : findALeague
+              }
+              playerData={player}
+            />
+            <StatsPanel data={findALeagueAndPlayed} />
           </>
         )}
       </div>
