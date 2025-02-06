@@ -5,6 +5,9 @@ import { getPlayerUrl } from "../../config/apiUrls";
 import { apiOptions } from "../../config/apiOptions";
 import { HeaderWithDetails } from "./components/HeaderWithDetails";
 import { StatsPanel } from "./components/StatsPanel";
+import RedSlash from "../../assets/red-slash.svg?react";
+import { Dropdown } from "../Players/components/Dropdown";
+import { seasons } from "../../data/seasons";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -53,9 +56,23 @@ const PlayerDetails = () => {
               playerData={player}
             />
           </div>
-          <div className="container mx-auto">
+          <div className="container mx-auto relative mt-10 md:mt-14 flex flex-col-reverse md:flex-row justify-between items-start">
+            <div className="flex items-center">
+              <RedSlash className="mr-3" />
+              <h2 className="text-3xl lg:text-4xl font-heading uppercase">
+                General
+              </h2>
+            </div>
+
+            <div>
+              <Dropdown
+                data={seasons}
+                title="2024"
+                id="league-dropdown"
+                hasImage={false}
+              />
+            </div>
             <StatsPanel data={findALeagueAndPlayed} />
-            <h2>General</h2>
           </div>
         </>
       )}

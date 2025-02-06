@@ -13,6 +13,7 @@ const Dropdown = ({
   hasImage, // Boolean to determine if images should be displayed
   imgKey, // Key to access image URL in data
   onChange, // Function to handle item selection
+  isDark = false, // Boolean to determine if dark mode is enabled
 }) => {
   // State to manage dropdown open/close status
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +46,12 @@ const Dropdown = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex align-center justify-between w-64 py-2 bg-transparent border-b border-red-600 text-slate-50"
       >
-        <span className="flex text-sm lg:text-base">
-          {selectedItemId !== 0 && selectedItem && (
+        <span
+          className={`flex text-sm lg:text-base ${
+            isDark ? "text-slate-50" : "text-slate-900"
+          }`}
+        >
+          {selectedItemId !== 0 && selectedItem && hasImage && (
             <img
               className="mr-2 h-6 w-6"
               src={selectedItem?.[imgKey] || ""}

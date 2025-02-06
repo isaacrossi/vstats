@@ -77,6 +77,7 @@ export const Players = () => {
               category="team"
               imgKey="logo"
               onChange={handleDropdownChange}
+              isDark={true}
             />
             {selectedTeamId === 0 && (
               <SearchForm

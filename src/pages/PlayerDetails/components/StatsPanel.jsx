@@ -5,7 +5,7 @@ import Rating from "../../../assets/rating.svg?react";
 import { formatNumber } from "../../../utils/formatNumber";
 
 const StatsPanel = ({ data }) => (
-  <div className="relative w-full md:w-1/3 mt-10 float-right text-sm lg:text-base text-slate-50 uppercase px-4 pt-8 pb-4 border-r border-l border-b border-slate-300  bg-blue-50 mb-24">
+  <div className="relative w-full md:w-1/3 sm:mt-10 md:mt-0 md:float-right text-sm lg:text-base text-slate-50 uppercase px-4 pt-8 pb-4 border-r border-l border-b border-slate-300  bg-blue-50 mb-24">
     <span className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-600 to-rose-800"></span>
     <h3 className="font-heading text-slate-900 text-xl lg:text-2xl uppercase mb-8">
       Quick Stats
