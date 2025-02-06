@@ -1,8 +1,9 @@
 import { countries } from "../../../data/countries";
 import { cmToFeetAndInches } from "../../../utils/cmToFeetAndInches";
+import { Header } from "../../../shared/components/Header";
 
 const HeaderWithDetails = ({ statData, playerData }) => (
-  <header className="pt-12 lg:pt-28 pb-14 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
+  <Header className="container mx-auto pt-12 lg:pt-28 pb-14 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
     <div className="flex-col-reverse md:flex-row flex justify-between">
       <div className="flex flex-col w-full">
         <h2 className="font-heading text-3xl lg:text-4xl text-slate-50 uppercase mb-1">
@@ -47,7 +48,7 @@ const HeaderWithDetails = ({ statData, playerData }) => (
       </div>
       <ImageWithLogo playerData={playerData} statData={statData} />
     </div>
-  </header>
+  </Header>
 );
 
 const ImageWithLogo = ({ playerData, statData }) => (

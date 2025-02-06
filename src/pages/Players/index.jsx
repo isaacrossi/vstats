@@ -6,6 +6,7 @@ import { teams } from "../../data/teams";
 import { fetchPlayers } from "../../utils/fetchPlayers";
 import { monitorScrollForInfiniteFetching } from "../../utils/scrollUtils";
 import { usePlayers } from "../../hooks/usePlayers";
+import { Header } from "../../shared/components/Header";
 
 export const Players = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,7 +62,7 @@ export const Players = () => {
   return (
     <div className="bg-white pb-28">
       <div className="bg-blue-1000">
-        <header className="xl:container mx-auto px-4 h-1/2 pt-14 lg:pt-28 pb-12 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
+        <Header>
           <h1 className="mb-12 font-heading text-3xl lg:text-4xl text-slate-50 uppercase">
             Players
           </h1>
@@ -88,7 +89,7 @@ export const Players = () => {
               />
             )}
           </div>
-        </header>
+        </Header>
       </div>
       {players.isError && (
         <p className="text-slate-50">Something went wrong...</p>

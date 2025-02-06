@@ -40,24 +40,26 @@ const PlayerDetails = () => {
   );
 
   return (
-    <div className="bg-blue-1000 px-4">
-      <div className="container mx-auto">
-        {loading ? (
-          <p className="text-slate-50">Loading...</p>
-        ) : (
-          <>
-            <h2>General</h2>
+    <>
+      {loading ? (
+        <p className="text-slate-50">Loading...</p>
+      ) : (
+        <>
+          <div className="bg-blue-1000">
             <HeaderWithDetails
               statData={
                 findALeagueAndPlayed ? findALeagueAndPlayed : findALeague
               }
               playerData={player}
             />
+          </div>
+          <div className="container mx-auto">
             <StatsPanel data={findALeagueAndPlayed} />
-          </>
-        )}
-      </div>
-    </div>
+            <h2>General</h2>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

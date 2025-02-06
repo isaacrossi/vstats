@@ -1,12 +1,11 @@
 import Goals from "../../../assets/goals.svg?react";
 import Apps from "../../../assets/appearances.svg?react";
-import Minutes from "../../../assets/minutes.svg?react";
 import Assists from "../../../assets/assists.svg?react";
 import Rating from "../../../assets/rating.svg?react";
 import { formatNumber } from "../../../utils/formatNumber";
 
 const StatsPanel = ({ data }) => (
-  <div className="relative w-full md:w-1/3 mt-10 float-right text-sm lg:text-base text-slate-50 uppercase px-4 pt-8 pb-4 border-r border-l border-b border-slate-300">
+  <div className="relative w-full md:w-1/3 mt-10 float-right text-sm lg:text-base text-slate-50 uppercase px-4 pt-8 pb-4 border-r border-l border-b border-slate-300  bg-blue-50 mb-24">
     <span className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-600 to-rose-800"></span>
     <h3 className="font-heading text-slate-900 text-xl lg:text-2xl uppercase mb-8">
       Quick Stats
@@ -16,12 +15,6 @@ const StatsPanel = ({ data }) => (
         label="Appearances"
         Icon={Apps}
         value={data?.games?.appearences || "0"}
-      />
-
-      <LabelWithIconAndValue
-        label="Minutes"
-        Icon={Minutes}
-        value={data?.games?.minutes || "0"}
       />
 
       <LabelWithIconAndValue
@@ -55,7 +48,7 @@ const LabelWithIconAndValue = ({
   iconColor = "text-slate-900",
   border = true,
 }) => (
-  <li className="relative flex justify-between pb-4 mb-4 last:pb-4 last:mb-0 ">
+  <li className="relative flex justify-between pb-4 mb-4 last:pb-4 last:mb-0 min-h-[46px]">
     <div className="flex items-center">
       {Icon ? <Icon className={`w-6 h-6 mr-2 ${iconColor}`} /> : null}
       <p className={`${textColor} ${bold ? "font-bold" : "font-medium"}`}>
