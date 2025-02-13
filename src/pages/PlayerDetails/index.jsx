@@ -9,6 +9,9 @@ import { Dropdown } from "../Players/components/Dropdown";
 import { seasons } from "../../data/seasons";
 import { H2WithSlash } from "./components/H2WithSlash";
 import { StatWithDividers } from "./components/StatWithDividers";
+import { Chart as ChartJS } from "chart.js/auto";
+import { Doughnut } from "react-chartjs-2";
+import { findAllByPlaceholderText } from "@testing-library/react";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -45,8 +48,6 @@ const PlayerDetails = () => {
     (stat) => stat.league?.name === "A-League"
   );
 
-  console.log("a league", findALeague);
-
   return (
     <>
       {loading ? (
@@ -76,8 +77,34 @@ const PlayerDetails = () => {
               <StatWithDividers statTitle="Total Passes">
                 {findALeague.passes.total}
               </StatWithDividers>
+              <div className="w-full md:w-2/3 md:pr-[7px]">
+                <div className="w-48 mx-auto relative mb-6 md:mb-9">
+                  <Doughnut
+                    data={{
+                      datasets: [
+                        {
+                          data: [
+                            findALeague.games.lineups,
+                            findALeague.substitutes.in,
+                          ],
+                          backgroundColor: ["#1D4ED8", "#1E3A8A"],
+                          cutout: "80%",
+                        },
+                      ],
+                    }}
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <h4 className="text-xl lg:text-2xl font-heading text-center pt-5 mb-1">
+                      {findALeague.games.appearences}
+                    </h4>
+                    <p className="uppercase text-sm text-center pb-5">
+                      appearences
+                    </p>
+                  </div>
+                  
+                </div>
+              </div>
             </div>
-
             <StatsPanel data={findALeagueAndPlayed} />
           </div>
         </>
