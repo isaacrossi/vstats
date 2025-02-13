@@ -60,7 +60,7 @@ export const Players = () => {
   }, []);
 
   return (
-    <div className="bg-white pb-28">
+    <div className="bg-blue-50 pb-28">
       <div className="bg-blue-1000">
         <Header>
           <h1 className="mb-12 font-heading text-3xl lg:text-4xl text-slate-50 uppercase">
@@ -95,7 +95,7 @@ export const Players = () => {
       {players.isError && (
         <p className="text-slate-50">Something went wrong...</p>
       )}
-      <div className="xl:container mx-auto px-4">
+      <div className="xl:container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
         <Table
           list={players.data}
           searchTerm={searchTerm}

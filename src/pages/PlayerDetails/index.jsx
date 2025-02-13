@@ -56,22 +56,34 @@ const PlayerDetails = () => {
               playerData={player}
             />
           </div>
-          <div className="container mx-auto relative mt-10 md:mt-14 flex flex-col-reverse md:flex-row justify-between items-start">
-            <div className="flex items-center">
-              <RedSlash className="mr-3" />
-              <h2 className="text-3xl lg:text-4xl font-heading uppercase">
-                General
-              </h2>
+          <div className="container mx-auto relative px-4 pt-10 md:pt-14 pb-14 md:pb-20 flex flex-col-reverse md:flex-col">
+            <div>
+              <div className="flex items-center justify-between w-full mb-4 md:mb-6">
+                <div className="flex items-center">
+                  <RedSlash className="mr-3" />
+                  <h2 className="text-3xl lg:text-4xl font-heading uppercase">
+                    General
+                  </h2>
+                </div>
+                <Dropdown
+                  data={seasons}
+                  title="2024"
+                  id="league-dropdown"
+                  hasImage={false}
+                />
+              </div>
+              <div className="w-full md:w-2/3 relative md:mr-12">
+                <span className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-slate-300 to-blue-50" />
+                <h4 className="text-xl lg:text-2xl font-heading text-center pt-5 mb-1">
+                  344
+                </h4>
+                <p className="uppercase text-sm text-center pb-5">
+                  Total passes
+                </p>
+                <span className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-slate-300 to-blue-50" />
+              </div>
             </div>
 
-            <div>
-              <Dropdown
-                data={seasons}
-                title="2024"
-                id="league-dropdown"
-                hasImage={false}
-              />
-            </div>
             <StatsPanel data={findALeagueAndPlayed} />
           </div>
         </>

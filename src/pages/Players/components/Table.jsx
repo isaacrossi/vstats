@@ -14,7 +14,9 @@ const Table = ({ list }) => (
 const TableRow = ({ item, isHeader = false }) => (
   <tr
     className={`grid grid-cols-5 md:grid-cols-7 justify-between p-2 md:p-5 text-left uppercase text-slate-900 gap-x-4 ${
-      isHeader ? "bg-slate-100 font-bold" : "even:bg-slate-50"
+      isHeader
+        ? "bg-slate-200 font-bold"
+        : "even:bg-slate-50 && odd:bg-slate-100"
     }`}
   >
     {isHeader ? (
