@@ -71,7 +71,7 @@ const ListItem = ({ title, children }) => (
     <span className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
     </span>
-    <p className="text-sm lg:text-base font-medium uppercase text-slate-50 py-0.5">
+    <p className="text-sm lg:text-base font-medium uppercase text-slate-50 md:py-0.5 lg:py-0">
       {children}
     </p>
   </li>

@@ -5,9 +5,10 @@ import { getPlayerUrl } from "../../config/apiUrls";
 import { apiOptions } from "../../config/apiOptions";
 import { HeaderWithDetails } from "./components/HeaderWithDetails";
 import { StatsPanel } from "./components/StatsPanel";
-import RedSlash from "../../assets/red-slash.svg?react";
 import { Dropdown } from "../Players/components/Dropdown";
 import { seasons } from "../../data/seasons";
+import { H2WithSlash } from "./components/H2WithSlash";
+import { StatWithDividers } from "./components/StatWithDividers";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -34,13 +35,17 @@ const PlayerDetails = () => {
     fetchPlayer(id, setPlayer, setLoading);
   }, [id]);
 
+  // find object that contains A-League stats and has played at least one game
   const findALeagueAndPlayed = player?.statistics.find(
     (stat) => stat.league?.name === "A-League" && stat.games.appearences > 0
   );
 
+  // find object that contains A-League stats
   const findALeague = player?.statistics.find(
     (stat) => stat.league?.name === "A-League"
   );
+
+  console.log("a league", findALeague);
 
   return (
     <>
@@ -56,15 +61,11 @@ const PlayerDetails = () => {
               playerData={player}
             />
           </div>
+
           <div className="container mx-auto relative px-4 pt-10 md:pt-14 pb-14 md:pb-20 flex flex-col-reverse md:flex-col">
             <div>
               <div className="flex items-center justify-between w-full mb-4 md:mb-6">
-                <div className="flex items-center">
-                  <RedSlash className="mr-3" />
-                  <h2 className="text-3xl lg:text-4xl font-heading uppercase">
-                    General
-                  </h2>
-                </div>
+                <H2WithSlash />
                 <Dropdown
                   data={seasons}
                   title="2024"
@@ -72,16 +73,9 @@ const PlayerDetails = () => {
                   hasImage={false}
                 />
               </div>
-              <div className="w-full md:w-2/3 relative md:mr-12">
-                <span className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-slate-300 to-blue-50" />
-                <h4 className="text-xl lg:text-2xl font-heading text-center pt-5 mb-1">
-                  344
-                </h4>
-                <p className="uppercase text-sm text-center pb-5">
-                  Total passes
-                </p>
-                <span className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-slate-300 to-blue-50" />
-              </div>
+              <StatWithDividers statTitle="Total Passes">
+                {findALeague.passes.total}
+              </StatWithDividers>
             </div>
 
             <StatsPanel data={findALeagueAndPlayed} />
