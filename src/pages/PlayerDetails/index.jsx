@@ -10,6 +10,10 @@ import { seasons } from "../../data/seasons";
 import { H2WithSlash } from "./components/H2WithSlash";
 import { StatWithDividers } from "./components/StatWithDividers";
 import { Doughnut } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
+import "chart.js/auto";
+import { Slash } from "../../shared/components/Slash";
+import { LabelWithIconAndValue } from "../../shared/components/LabelWithIconAndValue";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -95,13 +99,30 @@ const PlayerDetails = () => {
                     <h4 className="text-xl lg:text-2xl font-heading text-center pt-5 mb-1">
                       {findALeague.games.appearences}
                     </h4>
-                    <p className="uppercase text-sm text-center pb-5">
+                    <p className="uppercase text-sm lg:text-base text-center pb-5">
                       appearences
                     </p>
                   </div>
                 </div>
+                <div className="w-full md:w-2/3 mx-auto">
+                  <LabelWithIconAndValue
+                    Icon={Slash}
+                    label="started"
+                    value={findALeague.games.lineups}
+                  />
+                  <LabelWithIconAndValue
+                    Icon={Slash}
+                    label="subbed"
+                    value={findALeague.substitutes.in}
+                  />
+                  <LabelWithIconAndValue
+                    label="Minutes"
+                    value={findALeague.games.minutes}
+                  />
+                </div>
               </div>
             </div>
+
             <StatsPanel data={findALeagueAndPlayed} />
           </div>
         </>
