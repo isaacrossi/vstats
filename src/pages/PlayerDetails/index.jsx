@@ -9,9 +9,7 @@ import { Dropdown } from "../Players/components/Dropdown";
 import { seasons } from "../../data/seasons";
 import { H2WithSlash } from "./components/H2WithSlash";
 import { StatWithDividers } from "./components/StatWithDividers";
-import { Chart as ChartJS } from "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
-import { findAllByPlaceholderText } from "@testing-library/react";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -101,7 +99,6 @@ const PlayerDetails = () => {
                       appearences
                     </p>
                   </div>
-                  
                 </div>
               </div>
             </div>
