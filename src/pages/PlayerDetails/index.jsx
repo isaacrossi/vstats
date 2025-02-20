@@ -9,11 +9,11 @@ import { Dropdown } from "../Players/components/Dropdown";
 import { seasons } from "../../data/seasons";
 import { H2WithSlash } from "./components/H2WithSlash";
 import { StatWithDividers } from "./components/StatWithDividers";
-import { Doughnut } from "react-chartjs-2";
-import { Chart } from "react-chartjs-2";
-import "chart.js/auto";
-import { Slash } from "../../shared/components/Slash";
 import { LabelWithIconAndValue } from "../../shared/components/LabelWithIconAndValue";
+import RoyalBlueSlash from "../../assets/royal-blue-slash.svg?react";
+import NavyBlueSlash from "../../assets/navy-blue-slash.svg?react";
+import { DoughnutWithStat } from "./components/DoughnutWithStat";
+import { findALeagueAndPlayed, findALeague } from "../../utils/findUtils";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -40,16 +40,6 @@ const PlayerDetails = () => {
     fetchPlayer(id, setPlayer, setLoading);
   }, [id]);
 
-  // find object that contains A-League stats and has played at least one game
-  const findALeagueAndPlayed = player?.statistics.find(
-    (stat) => stat.league?.name === "A-League" && stat.games.appearences > 0
-  );
-
-  // find object that contains A-League stats
-  const findALeague = player?.statistics.find(
-    (stat) => stat.league?.name === "A-League"
-  );
-
   return (
     <>
       {loading ? (
@@ -59,7 +49,9 @@ const PlayerDetails = () => {
           <div className="bg-blue-1000">
             <HeaderWithDetails
               statData={
-                findALeagueAndPlayed ? findALeagueAndPlayed : findALeague
+                findALeagueAndPlayed(player)
+                  ? findALeagueAndPlayed(player)
+                  : findALeague(player)
               }
               playerData={player}
             />
@@ -77,53 +69,39 @@ const PlayerDetails = () => {
                 />
               </div>
               <StatWithDividers statTitle="Total Passes">
-                {findALeague.passes.total}
+                {findALeague(player)?.passes?.total}
               </StatWithDividers>
               <div className="w-full md:w-2/3 md:pr-[7px]">
-                <div className="w-48 mx-auto relative mb-6 md:mb-9">
-                  <Doughnut
-                    data={{
-                      datasets: [
-                        {
-                          data: [
-                            findALeague.games.lineups,
-                            findALeague.substitutes.in,
-                          ],
-                          backgroundColor: ["#1D4ED8", "#1E3A8A"],
-                          cutout: "80%",
-                        },
-                      ],
-                    }}
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <h4 className="text-xl lg:text-2xl font-heading text-center pt-5 mb-1">
-                      {findALeague.games.appearences}
-                    </h4>
-                    <p className="uppercase text-sm lg:text-base text-center pb-5">
-                      appearences
-                    </p>
-                  </div>
-                </div>
+                <DoughnutWithStat
+                  doughnutData={[
+                    findALeague(player)?.games?.lineups,
+                    findALeague(player)?.substitutes?.in,
+                  ]}
+                  colourOne="#1D4ED8"
+                  colourTwo="#1E3A8A"
+                  centeredData={findALeague(player)?.games?.appearences}
+                  statText="Appearences"
+                />
                 <div className="w-full md:w-2/3 mx-auto">
                   <LabelWithIconAndValue
-                    Icon={Slash}
+                    Icon={RoyalBlueSlash}
                     label="started"
-                    value={findALeague.games.lineups}
+                    value={findALeague(player)?.games?.lineups}
                   />
                   <LabelWithIconAndValue
-                    Icon={Slash}
+                    Icon={NavyBlueSlash}
                     label="subbed"
-                    value={findALeague.substitutes.in}
+                    value={findALeague(player)?.substitutes?.in}
                   />
                   <LabelWithIconAndValue
                     label="Minutes"
-                    value={findALeague.games.minutes}
+                    value={findALeague(player)?.games?.minutes}
                   />
                 </div>
               </div>
             </div>
 
-            <StatsPanel data={findALeagueAndPlayed} />
+            <StatsPanel data={findALeagueAndPlayed(player)} />
           </div>
         </>
       )}
