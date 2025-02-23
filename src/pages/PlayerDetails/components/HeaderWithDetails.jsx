@@ -35,7 +35,7 @@ const HeaderWithDetails = ({ statData, playerData }) => (
 
           <ul className="col-span-4">
             <ListItem title="Weight">
-              {playerData.player.weight
+              {playerData?.player?.weight
                 ? `${playerData?.player?.weight}`
                 : "n/a"}
             </ListItem>

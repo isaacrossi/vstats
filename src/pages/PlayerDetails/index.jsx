@@ -14,6 +14,8 @@ import RoyalBlueSlash from "../../assets/royal-blue-slash.svg?react";
 import NavyBlueSlash from "../../assets/navy-blue-slash.svg?react";
 import { DoughnutWithStat } from "./components/DoughnutWithStat";
 import { findALeagueAndPlayed, findALeague } from "../../utils/findUtils";
+import { calculatePercentage } from "../../utils/calculatePercentage";
+import { useMemo } from "react";
 
 const fetchPlayer = async (id, setState, loadingState) => {
   try {
@@ -40,6 +42,11 @@ const PlayerDetails = () => {
     fetchPlayer(id, setPlayer, setLoading);
   }, [id]);
 
+  const leagueAndPlayedData = useMemo(
+    () => findALeagueAndPlayed(player),
+    [player]
+  );
+
   return (
     <>
       {loading ? (
@@ -49,9 +56,7 @@ const PlayerDetails = () => {
           <div className="bg-blue-1000">
             <HeaderWithDetails
               statData={
-                findALeagueAndPlayed(player)
-                  ? findALeagueAndPlayed(player)
-                  : findALeague(player)
+                leagueAndPlayedData ? leagueAndPlayedData : findALeague(player)
               }
               playerData={player}
             />
@@ -69,49 +74,146 @@ const PlayerDetails = () => {
                 />
               </div>
               <StatWithDividers statTitle="Total Passes" hasSidebar={true}>
-                {findALeagueAndPlayed(player)?.passes?.total}
+                {leagueAndPlayedData?.passes?.total}
               </StatWithDividers>
-              <div className="w-full md:w-2/3 md:pr-[7px]">
+              <div className="w-full md:w-2/3 md:pr-[7px] h-fit">
                 <DoughnutWithStat
                   doughnutData={[
-                    findALeagueAndPlayed(player)?.games?.lineups,
-                    findALeagueAndPlayed(player)?.substitutes?.in,
+                    leagueAndPlayedData?.games?.lineups,
+                    leagueAndPlayedData?.substitutes?.in,
                   ]}
                   colourOne="#1D4ED8"
                   colourTwo="#1E3A8A"
-                  centeredData={
-                    findALeagueAndPlayed(player)?.games?.appearences
-                  }
+                  centeredData={leagueAndPlayedData?.games?.appearences}
                   statText="Appearences"
                 />
-                <div className="w-full md:w-2/3 mx-auto">
+                <div className="w-full md:w-2/3 mx-auto h-fit">
                   <LabelWithIconAndValue
                     Icon={RoyalBlueSlash}
                     label="started"
-                    value={findALeagueAndPlayed(player)?.games?.lineups}
+                    value={leagueAndPlayedData?.games?.lineups}
                   />
                   <LabelWithIconAndValue
                     Icon={NavyBlueSlash}
                     label="subbed"
-                    value={findALeagueAndPlayed(player)?.substitutes?.in}
+                    value={leagueAndPlayedData?.substitutes?.in}
                   />
                   <LabelWithIconAndValue
                     label="Minutes"
-                    value={findALeagueAndPlayed(player)?.games?.minutes}
+                    value={leagueAndPlayedData?.games?.minutes}
                     isWithoutSlash={true}
+                    border={false}
                   />
                 </div>
               </div>
             </div>
 
-            <StatsPanel data={findALeagueAndPlayed(player)} />
+            <StatsPanel data={leagueAndPlayedData} />
           </section>
+
           <section className="bg-blue-1000 px-4 pt-10 md:pt-14 pb-14 md:pb-20">
             <div className="container mx-auto">
               <H2WithSlash title="Attack" textColour="text-slate-50" />
-              <StatWithDividers statTitle="Key Passes" isDark={true}>
-                {findALeagueAndPlayed(player)?.passes?.key}
-              </StatWithDividers>
+              <div className="flex flex-col md:flex-row">
+                <StatWithDividers
+                  statTitle="Key Passes"
+                  isDark={true}
+                  hasSolidBorder={true}
+                >
+                  {leagueAndPlayedData?.passes?.key}
+                </StatWithDividers>
+                <StatWithDividers
+                  statTitle="Fouls Drawn"
+                  isDark={true}
+                  hasSolidBorder={false}
+                >
+                  {leagueAndPlayedData?.fouls?.drawn}
+                </StatWithDividers>
+              </div>
+              <div className="flex flex-col md:flex-row">
+                <div className="w-full md:w-1/2 ">
+                  <DoughnutWithStat
+                    doughnutData={[
+                      leagueAndPlayedData?.shots?.on,
+                      leagueAndPlayedData?.shots?.total -
+                        leagueAndPlayedData?.shots?.on,
+                    ]}
+                    colourOne="#1D4ED8"
+                    colourTwo="#1E3A8A"
+                    centeredData={
+                      calculatePercentage(
+                        leagueAndPlayedData?.shots?.on,
+                        leagueAndPlayedData?.shots?.total
+                      ) + "%"
+                    }
+                    statText="Shot Accuracy"
+                    isDark={true}
+                  />
+                  <div className="w-full md:w-2/3 mx-auto h-fit">
+                    <LabelWithIconAndValue
+                      Icon={RoyalBlueSlash}
+                      label="on"
+                      value={leagueAndPlayedData?.games?.lineups}
+                      textColor="text-slate-50"
+                    />
+                    <LabelWithIconAndValue
+                      Icon={NavyBlueSlash}
+                      label="off"
+                      value={leagueAndPlayedData?.substitutes?.in}
+                      textColor="text-slate-50"
+                    />
+                    <LabelWithIconAndValue
+                      label="Total"
+                      value={leagueAndPlayedData?.games?.minutes}
+                      isWithoutSlash={true}
+                      border={false}
+                      textColor="text-slate-50"
+                    />
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2">
+                  <DoughnutWithStat
+                    doughnutData={[
+                      leagueAndPlayedData?.dribbles?.success,
+                      leagueAndPlayedData?.dribbles?.attempts -
+                        leagueAndPlayedData?.dribbles?.success,
+                      leagueAndPlayedData?.shots?.total -
+                        leagueAndPlayedData?.shots?.on,
+                    ]}
+                    colourOne="#1D4ED8"
+                    colourTwo="#1E3A8A"
+                    centeredData={
+                      calculatePercentage(
+                        leagueAndPlayedData?.dribbles?.success,
+                        leagueAndPlayedData?.dribbles?.attempts
+                      ) + "%"
+                    }
+                    statText="Dribble Success"
+                    isDark={true}
+                  />
+                  <div className="w-full md:w-2/3 mx-auto h-fit">
+                    <LabelWithIconAndValue
+                      Icon={RoyalBlueSlash}
+                      label="successful"
+                      value={leagueAndPlayedData?.games?.lineups}
+                      textColor="text-slate-50"
+                    />
+                    <LabelWithIconAndValue
+                      Icon={NavyBlueSlash}
+                      label="failed"
+                      value={leagueAndPlayedData?.substitutes?.in}
+                      textColor="text-slate-50"
+                    />
+                    <LabelWithIconAndValue
+                      label="Total"
+                      value={leagueAndPlayedData?.games?.minutes}
+                      isWithoutSlash={true}
+                      border={false}
+                      textColor="text-slate-50"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </>

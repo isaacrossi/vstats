@@ -9,7 +9,7 @@ export const LabelWithIconAndValue = ({
   isWithoutSlash = false,
 }) => (
   <li
-    className={`relative flex justify-between pb-4 mb-4 last:pb-4 last:mb-0 min-h-[49px] ${
+    className={`relative flex justify-between pb-4 mb-4 last:pb-4 last:mb-0   ${
       isWithoutSlash && "[&:nth-child(3)]:ml-8"
     }`}
   >

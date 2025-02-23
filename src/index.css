@@ -26,3 +26,7 @@
   color: transparent;
   -webkit-text-stroke: 1px #ffffff; /* Adjust the color and width as needed */
 }
+
+span {
+  will-change: transform;
+}
