@@ -1,8 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { getPlayerUrl } from "../../config/apiUrls";
-import { apiOptions } from "../../config/apiOptions";
 import { HeaderWithDetails } from "./components/HeaderWithDetails";
 import { StatsPanel } from "./components/StatsPanel";
 import { Dropdown } from "../Players/components/Dropdown";
@@ -12,25 +9,15 @@ import { StatWithDividers } from "./components/StatWithDividers";
 import { LabelWithIconAndValue } from "./components/LabelWithIconAndValue";
 import RoyalBlueSlash from "../../assets/royal-blue-slash.svg?react";
 import NavyBlueSlash from "../../assets/navy-blue-slash.svg?react";
-import { DoughnutWithStat } from "./components/DoughnutWithStat";
+import { DoughnutWithCenteredStat } from "./components/DoughnutWithCenteredStat";
 import { findALeagueAndPlayed, findALeague } from "../../utils/findUtils";
 import { calculatePercentage } from "../../utils/calculatePercentage";
+import Blue500Slash from "../../assets/blue-500-slash.svg?react";
+import Blue300Slash from "../../assets/blue-300-slash.svg?react";
 import { useMemo } from "react";
-
-const fetchPlayer = async (id, setState, loadingState) => {
-  try {
-    const url = getPlayerUrl(id);
-    loadingState(true);
-    const result = await axios.get(url, apiOptions);
-    const response = result.data.response[0];
-    console.log(response);
-    setState(response);
-  } catch (error) {
-    console.error("API fetch error:", error);
-  } finally {
-    loadingState(false);
-  }
-};
+import Red600Slash from "../../assets/red-600-slash.svg?react";
+import Yellow300Slash from "../../assets/yellow-300-slash.svg?react";
+import { fetchPlayer } from "../../utils/fetchPlayer";
 
 const PlayerDetails = () => {
   const [player, setPlayer] = useState(null);
@@ -64,8 +51,12 @@ const PlayerDetails = () => {
 
           <section className="container mx-auto relative px-4 pt-10 md:pt-14 pb-14 md:pb-20 flex flex-col-reverse md:flex-col">
             <div>
-              <div className="flex items-center justify-between w-full mb-4 md:mb-6">
-                <H2WithSlash title="General" marginBottom={false} />
+              <div className="flex flex-col md:flex-row md:items-center justify-between w-full mb-4 md:mb-6">
+                <H2WithSlash
+                  title="General"
+                  marginBottom={false}
+                  hasinput={true}
+                />
                 <Dropdown
                   data={seasons}
                   title="2024"
@@ -73,11 +64,15 @@ const PlayerDetails = () => {
                   hasImage={false}
                 />
               </div>
-              <StatWithDividers statTitle="Total Passes" hasSidebar={true}>
+              <StatWithDividers
+                statTitle="Total Passes"
+                hasSidebar={true}
+                isSingle={true}
+              >
                 {leagueAndPlayedData?.passes?.total}
               </StatWithDividers>
-              <div className="w-full md:w-2/3 md:pr-[7px] h-fit">
-                <DoughnutWithStat
+              <div className="w-full md:w-2/3 md:pr-[7px]">
+                <DoughnutWithCenteredStat
                   doughnutData={[
                     leagueAndPlayedData?.games?.lineups,
                     leagueAndPlayedData?.substitutes?.in,
@@ -87,7 +82,7 @@ const PlayerDetails = () => {
                   centeredData={leagueAndPlayedData?.games?.appearences}
                   statText="Appearences"
                 />
-                <div className="w-full md:w-2/3 mx-auto h-fit">
+                <div className="w-full md:w-2/3 mx-auto">
                   <LabelWithIconAndValue
                     Icon={RoyalBlueSlash}
                     label="started"
@@ -131,15 +126,15 @@ const PlayerDetails = () => {
                 </StatWithDividers>
               </div>
               <div className="flex flex-col md:flex-row">
-                <div className="w-full md:w-1/2 ">
-                  <DoughnutWithStat
+                <div className="w-full md:w-1/2 mb-16 md:mb-0">
+                  <DoughnutWithCenteredStat
                     doughnutData={[
                       leagueAndPlayedData?.shots?.on,
                       leagueAndPlayedData?.shots?.total -
                         leagueAndPlayedData?.shots?.on,
                     ]}
-                    colourOne="#1D4ED8"
-                    colourTwo="#1E3A8A"
+                    colourOne="#3b82f6"
+                    colourTwo="#93c5fd"
                     centeredData={
                       calculatePercentage(
                         leagueAndPlayedData?.shots?.on,
@@ -149,39 +144,43 @@ const PlayerDetails = () => {
                     statText="Shot Accuracy"
                     isDark={true}
                   />
-                  <div className="w-full md:w-2/3 mx-auto h-fit">
+                  <div className="w-full md:w-2/3 mx-auto">
                     <LabelWithIconAndValue
-                      Icon={RoyalBlueSlash}
+                      Icon={Blue500Slash}
                       label="on"
-                      value={leagueAndPlayedData?.games?.lineups}
+                      value={leagueAndPlayedData?.shots?.on}
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                     <LabelWithIconAndValue
-                      Icon={NavyBlueSlash}
+                      Icon={Blue300Slash}
                       label="off"
-                      value={leagueAndPlayedData?.substitutes?.in}
+                      value={
+                        leagueAndPlayedData?.shots?.total -
+                        leagueAndPlayedData?.shots?.on
+                      }
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                     <LabelWithIconAndValue
                       label="Total"
-                      value={leagueAndPlayedData?.games?.minutes}
+                      value={leagueAndPlayedData?.shots?.total}
                       isWithoutSlash={true}
                       border={false}
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                   </div>
                 </div>
                 <div className="w-full md:w-1/2">
-                  <DoughnutWithStat
+                  <DoughnutWithCenteredStat
                     doughnutData={[
                       leagueAndPlayedData?.dribbles?.success,
                       leagueAndPlayedData?.dribbles?.attempts -
                         leagueAndPlayedData?.dribbles?.success,
-                      leagueAndPlayedData?.shots?.total -
-                        leagueAndPlayedData?.shots?.on,
                     ]}
-                    colourOne="#1D4ED8"
-                    colourTwo="#1E3A8A"
+                    colourOne="#3b82f6"
+                    colourTwo="#93c5fd"
                     centeredData={
                       calculatePercentage(
                         leagueAndPlayedData?.dribbles?.success,
@@ -193,25 +192,124 @@ const PlayerDetails = () => {
                   />
                   <div className="w-full md:w-2/3 mx-auto h-fit">
                     <LabelWithIconAndValue
-                      Icon={RoyalBlueSlash}
+                      Icon={Blue500Slash}
                       label="successful"
-                      value={leagueAndPlayedData?.games?.lineups}
+                      value={leagueAndPlayedData?.dribbles?.success}
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                     <LabelWithIconAndValue
-                      Icon={NavyBlueSlash}
+                      Icon={Blue300Slash}
                       label="failed"
-                      value={leagueAndPlayedData?.substitutes?.in}
+                      value={
+                        leagueAndPlayedData?.dribbles?.attempts -
+                        leagueAndPlayedData?.dribbles?.success
+                      }
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                     <LabelWithIconAndValue
                       label="Total"
-                      value={leagueAndPlayedData?.games?.minutes}
+                      value={leagueAndPlayedData?.dribbles?.attempts}
                       isWithoutSlash={true}
                       border={false}
                       textColor="text-slate-50"
+                      isDark={true}
                     />
                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
+            <H2WithSlash title="Defence" />
+            <div className="flex flex-col md:flex-row">
+              <StatWithDividers statTitle="Tackles" hasSolidBorder={true}>
+                {leagueAndPlayedData?.tackles?.total}
+              </StatWithDividers>
+              <StatWithDividers statTitle="Blocks" hasSolidBorder={true}>
+                {leagueAndPlayedData?.tackles?.blocks}
+              </StatWithDividers>
+              <StatWithDividers statTitle="Interceptions" hasSolidBorder={true}>
+                {leagueAndPlayedData?.tackles?.interceptions}
+              </StatWithDividers>
+              <StatWithDividers statTitle="Fouls" hasSolidBorder={false}>
+                {leagueAndPlayedData?.fouls?.committed}
+              </StatWithDividers>
+            </div>
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2">
+                <DoughnutWithCenteredStat
+                  doughnutData={[
+                    leagueAndPlayedData?.duels?.won,
+                    leagueAndPlayedData?.duels?.total -
+                      leagueAndPlayedData?.duels?.won,
+                  ]}
+                  colourOne="#1D4ED8"
+                  colourTwo="#1E3A8A"
+                  centeredData={
+                    calculatePercentage(
+                      leagueAndPlayedData?.duels?.won,
+                      leagueAndPlayedData?.duels?.total
+                    ) + "%"
+                  }
+                  statText="Duel Success"
+                />
+                <div className="w-full md:w-2/3 mx-auto h-fit">
+                  <LabelWithIconAndValue
+                    Icon={RoyalBlueSlash}
+                    label="successful"
+                    value={leagueAndPlayedData?.duels?.won}
+                    textColor="text-slate-900"
+                  />
+                  <LabelWithIconAndValue
+                    Icon={NavyBlueSlash}
+                    label="failed"
+                    value={
+                      leagueAndPlayedData?.duels?.total -
+                      leagueAndPlayedData?.duels?.won
+                    }
+                    textColor="text-slate-900"
+                  />
+                  <LabelWithIconAndValue
+                    label="Total"
+                    value={leagueAndPlayedData?.duels?.total}
+                    isWithoutSlash={true}
+                    border={false}
+                    textColor="text-slate-900"
+                  />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 mb-16 md:mb-0">
+                <DoughnutWithCenteredStat
+                  doughnutData={[
+                    leagueAndPlayedData?.cards?.yellow +
+                      leagueAndPlayedData?.cards?.yellowred,
+                    leagueAndPlayedData?.cards?.red +
+                      leagueAndPlayedData?.cards?.yellowred,
+                  ]}
+                  colourOne="#fde047"
+                  colourTwo="#dc2626"
+                  centeredData={
+                    leagueAndPlayedData?.cards?.yellow +
+                    leagueAndPlayedData?.cards?.red +
+                    leagueAndPlayedData?.cards?.yellowred
+                  }
+                  statText="cards"
+                />
+                <div className="w-full md:w-2/3 mx-auto h-fit">
+                  <LabelWithIconAndValue
+                    Icon={Yellow300Slash}
+                    label="yellow"
+                    value={leagueAndPlayedData?.cards?.yellow}
+                    textColor="text-slate-900"
+                  />
+                  <LabelWithIconAndValue
+                    Icon={Red600Slash}
+                    label="red"
+                    value={leagueAndPlayedData?.cards?.red}
+                    textColor="text-slate-900"
+                  />
                 </div>
               </div>
             </div>

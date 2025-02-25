@@ -2,7 +2,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart } from "react-chartjs-2";
 import "chart.js/auto";
 
-export const DoughnutWithStat = ({
+export const DoughnutWithCenteredStat = ({
   doughnutData,
   colourOne,
   colourTwo,

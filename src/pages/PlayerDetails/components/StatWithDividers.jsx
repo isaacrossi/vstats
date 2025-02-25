@@ -4,12 +4,24 @@ export const StatWithDividers = ({
   hasSidebar = false,
   isDark = false,
   hasSolidBorder = false,
+  isSingle = false,
 }) => (
   <div
-    className={`w-full first:mb-0 relative h-fit mb-14 md:mb-16 
+    className={`w-full relative h-fit last:mb-14 last:md:mb-16 mb-0
       ${hasSidebar && "md:w-2/3 md:mr-12 md:pr-[7px]"} 
-    ${isDark ? "text-slate-50" : "text-slate-900"}
-    ${hasSolidBorder && "md:border-r md:border-solid md:border-slate-600"}
+      ${isDark ? "text-slate-50" : "text-slate-900"}
+      ${
+        hasSolidBorder &&
+        isDark &&
+        "md:border-r md:border-solid md:border-slate-600"
+      }
+      ${
+        hasSolidBorder &&
+        !isDark &&
+        "md:border-r md:border-solid md:border-slate-300"
+      }
+      ${isSingle && "mb-14 md:mb-16"}
+
     `}
   >
     <span
@@ -18,7 +30,13 @@ export const StatWithDividers = ({
       }
         ${
           hasSolidBorder &&
+          isDark &&
           "md:bg-slate-600 sm:bg-gradient-to-r sm:from-slate-600 to-blue-1000"
+        }
+        ${
+          hasSolidBorder &&
+          !isDark &&
+          "md:bg-slate-300 sm:bg-gradient-to-r sm:from-slate-300 to-blue-50"
         }
       }`}
     />
@@ -32,7 +50,13 @@ export const StatWithDividers = ({
       }
         ${
           hasSolidBorder &&
-          "md:bg-slate-600 sm:bg-gradient-to-r sm:from-slate-600 to-blue-1000"
+          isDark &&
+          "md:bg-slate-600 sm:bg-gradient-to-r sm:from-slate-600 to-blue-50"
+        }
+        ${
+          hasSolidBorder &&
+          !isDark &&
+          "md:bg-slate-300 sm:bg-gradient-to-r sm:from-slate-300 to-blue-50"
         }`}
     />
   </div>
