@@ -24,7 +24,7 @@ export const LabelWithIconAndValue = ({
         {label}
       </p>
     </div>
-    {value && <p className={`font-bold ${textColor}`}>{value}</p>}
+    <p className={`font-bold ${textColor}`}>{value}</p>
 
     {border && (
       <span

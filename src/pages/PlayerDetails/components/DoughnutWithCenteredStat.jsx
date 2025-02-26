@@ -10,7 +10,7 @@ export const DoughnutWithCenteredStat = ({
   statText,
   isDark = false,
 }) => (
-  <div className="w-48 mx-auto relative mb-6 md:mb-9 ">
+  <div className="w-48 h-48 mx-auto relative mb-6 md:mb-9 ">
     <Doughnut
       data={{
         datasets: [
