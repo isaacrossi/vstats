@@ -63,7 +63,7 @@ const PlayerDetails = () => {
             />
           </div>
 
-          <GeneralSection statData={leagueAndPlayedData} />
+          <GeneralSection data={leagueAndPlayedData} />
           <AttackSection data={leagueAndPlayedData} />
           <DefenceSection data={leagueAndPlayedData} />
         </>
