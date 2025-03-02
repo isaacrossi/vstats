@@ -43,8 +43,9 @@ const HeaderWithDetails = ({ statData, playerData }) => (
               {cmToFeetAndInches(playerData?.player?.height)}
             </ListItem>
             <ListItem title="Birth">
-              {playerData?.player?.birth.date} ({playerData?.player?.age} years
-              old)
+              {playerData?.player?.birth.date
+                ? `${playerData?.player?.birth.date} (${playerData?.player?.age} years old)`
+                : "n/a"}
             </ListItem>
           </ul>
         </div>
