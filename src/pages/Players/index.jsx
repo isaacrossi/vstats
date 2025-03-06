@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from "./components/Dropdown";
+import { Dropdown } from "../../shared/components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "../../data/teams";

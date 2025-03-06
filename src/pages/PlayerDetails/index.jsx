@@ -7,41 +7,23 @@ import { fetchPlayer } from "../../utils/fetchPlayer";
 import { GeneralSection } from "./components/sections/GeneralSection";
 import { AttackSection } from "./components/sections/AttackSection";
 import { DefenceSection } from "./components/sections/DefenceSection";
-import { getPlayerSeasonsUrl } from "../../config/apiUrls";
-import axios from "axios";
-import { apiOptions } from "../../config/apiOptions";
-
-const fetchPlayerSeasons = async (id, setState, loadingState) => {
-  try {
-    const url = getPlayerSeasonsUrl(id);
-    loadingState(true);
-    const result = await axios.get(url, apiOptions);
-    const response = result.data.response;
-    console.log(response);
-    setState(response);
-  } catch (error) {
-    console.error("API fetch error:", error);
-  } finally {
-    loadingState(false);
-  }
-};
 
 const PlayerDetails = () => {
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [playerSeasons, setPlayerSeasons] = useState(null);
+  const [selectedSeasonId, setSelectedSeasonId] = useState(2024);
 
   const { id } = useParams();
 
   useEffect(() => {
-    fetchPlayer(id, setPlayer, setLoading);
+    fetchPlayer(id, setPlayer, setLoading, selectedSeasonId);
   }, [id]);
 
-  useEffect(() => {
-    fetchPlayerSeasons(id, setPlayerSeasons, setLoading);
-  }, [id]);
-
-  console.log("playerSeasons", playerSeasons);
+  const handleDropdownChange = (item) => {
+    setSelectedSeasonId(item.id);
+    fetchPlayer(id, setPlayer, setLoading, item.id);
+    console.log(item.id);
+  };
 
   const leagueAndPlayedData = useMemo(
     () => findALeagueAndPlayed(player),
@@ -63,7 +45,11 @@ const PlayerDetails = () => {
             />
           </div>
 
-          <GeneralSection data={leagueAndPlayedData} />
+          <GeneralSection
+            data={leagueAndPlayedData}
+            handleDropdownChange={handleDropdownChange}
+            selectedItemId={selectedSeasonId}
+          />
           <AttackSection data={leagueAndPlayedData} />
           <DefenceSection data={leagueAndPlayedData} />
         </>

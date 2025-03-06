@@ -1,8 +1,8 @@
 // Importing necessary hooks and components
 import { useRef, useState } from "react";
-import useOutsideClick from "../../../hooks/useOutsideClick"; // Custom hook to handle outside click
+import useOutsideClick from "../../hooks/useOutsideClick"; // Custom hook to handle outside click
 import { GoChevronDown } from "react-icons/go"; // Chevron down icon from react-icons library
-import { shortenToTwo } from "../../../utils/shortenTeamName"; // Function to shorten team name
+import { shortenToTwo } from "../../utils/shortenTeamName"; // Function to shorten team name
 
 // Dropdown component definition
 const Dropdown = ({
@@ -10,7 +10,7 @@ const Dropdown = ({
   data, // Data to populate the dropdown
   title = "select", // Default title for the dropdown
   selectedItemId,
-  hasImage, // Boolean to determine if images should be displayed
+  hasImage = false, // Boolean to determine if images should be displayed
   imgKey, // Key to access image URL in data
   onChange, // Function to handle item selection
   isDark = false, // Boolean to determine if dark mode is enabled
@@ -24,7 +24,7 @@ const Dropdown = ({
   const handleChange = (item) => {
     setIsOpen(false);
     onChange(item);
-    console.log(item.id);
+    console.log("id", item.id);
   };
 
   // Ref for the dropdown element
