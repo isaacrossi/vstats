@@ -3,7 +3,6 @@ import { Dropdown } from "../../shared/components/Dropdown";
 import { Table } from "./components/Table";
 import { SearchForm } from "./components/SearchForm";
 import { teams } from "../../data/teams";
-import { fetchPlayers } from "../../utils/fetchPlayers";
 import { monitorScrollForInfiniteFetching } from "../../utils/scrollUtils";
 import { usePlayers } from "../../hooks/usePlayers";
 import { Header } from "../../shared/components/Header";
@@ -12,52 +11,44 @@ export const Players = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState(0);
-  const [hasReachedBottom, setHasReachedBottom] = useState(false);
 
-  const [players, dispatchPlayers, fetchMorePlayers] = usePlayers(
-    selectedTeamId,
-    submittedSearchTerm,
-    setHasReachedBottom
-  );
+  const {
+    players,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePlayers(selectedTeamId, submittedSearchTerm);
 
   useEffect(() => {
     monitorScrollForInfiniteFetching(
-      fetchMorePlayers,
-      players,
-      setHasReachedBottom,
-      hasReachedBottom
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage
     );
-  }, [players.isLoading, hasReachedBottom]);
+  }, [hasNextPage, isFetchingNextPage]);
 
   const handleSearchCancel = () => {
     setSearchTerm("");
     setSubmittedSearchTerm("");
     setSelectedTeamId(0);
-    dispatchPlayers({ type: "PLAYERS_RESET" });
-    fetchPlayers(1, "", 0, dispatchPlayers);
   };
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    dispatchPlayers({ type: "PLAYERS_RESET" });
     setSubmittedSearchTerm(searchTerm);
-    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
   };
 
   const handleDropdownChange = (item) => {
     if (item.id !== selectedTeamId) {
-      dispatchPlayers({ type: "PLAYERS_RESET" });
       searchTerm && setSearchTerm("");
       setSubmittedSearchTerm("");
       setSelectedTeamId(item.id);
-      fetchPlayers(1, "", item.id, dispatchPlayers);
-      setHasReachedBottom(false); // Reset bottom state
     }
   };
 
-  useEffect(() => {
-    fetchPlayers(1, searchTerm, selectedTeamId, dispatchPlayers);
-  }, []);
+  console.log(players);
 
   return (
     <div className="bg-blue-50 pb-28">
@@ -92,16 +83,14 @@ export const Players = () => {
           </div>
         </Header>
       </div>
-      {players.isError && (
-        <p className="text-slate-50">Something went wrong...</p>
-      )}
+      {isError && <p className="text-slate-50">Something went wrong...</p>}
       <div className="xl:container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
         <Table
-          list={players.data}
+          list={players}
           searchTerm={searchTerm}
           submittedSearchTerm={submittedSearchTerm}
         />
-        {players.isLoading && <p className="text-slate-50">Loading....</p>}
+        {isLoading && <p className="text-slate-50">Loading....</p>}
       </div>
     </div>
   );

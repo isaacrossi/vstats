@@ -27,7 +27,7 @@ export const DefenceSection = ({ data }) => (
       </StatWithDividers>
     </div>
     <div className="flex flex-col md:flex-row">
-      <div className="w-full md:w-1/2">
+      <div className="w-full md:w-1/2 mb-16 md:mb-0">
         <DoughnutWithCenteredStat
           doughnutData={[
             data?.duels?.won,

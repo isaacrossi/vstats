@@ -1,73 +1,38 @@
-import { useReducer } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchPlayers } from "../utils/fetchPlayers";
 
-const playersReducer = (state, action) => {
-  switch (action.type) {
-    case `PLAYERS_FETCH_INIT`:
-      return {
-        ...state,
-        isLoading: true,
-        isError: false,
-      };
-    case `PLAYERS_FETCH_SUCCESS`:
-      return {
-        ...state,
-        isLoading: false,
-        isError: false,
-        data:
-          action.payload.page === 1
-            ? action.payload.list
-            : state.data.concat(action.payload.list),
-        page: action.payload.page,
-        totalPage: action.payload.totalPage,
-      };
-    case `PLAYERS_FETCH_FAILURE`:
-      return {
-        ...state,
-        isLoading: false,
-        isError: true,
-      };
-    case "PLAYERS_RESET":
-      return {
-        ...state,
-        data: [],
-        page: 1,
-        isLoading: false,
-        isError: false,
-        totalPage: null,
-      };
-    default:
-      throw new Error();
-  }
-};
-
-const usePlayers = (
-  selectedTeamId,
-  submittedSearchTerm,
-  setHasReachedBottom
-) => {
-  const [players, dispatchPlayers] = useReducer(playersReducer, {
-    data: [],
-    page: 1,
-    totalPage: null,
-    isLoading: false,
-    isError: false,
+export const usePlayers = (selectedTeamId, submittedSearchTerm) => {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery({
+    queryKey: ["players", selectedTeamId, submittedSearchTerm],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchPlayers(pageParam, submittedSearchTerm, selectedTeamId),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.totalPage) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
   });
 
-  const fetchMorePlayers = () => {
-    if (!players.isLoading && players.page < players.totalPage) {
-      fetchPlayers(
-        players.page + 1,
-        submittedSearchTerm,
-        selectedTeamId,
-        dispatchPlayers
-      ).then(() => {
-        setHasReachedBottom(false); // Allow fetching again once new data is loaded
-      });
-    }
+  // Check if data exists and properly flatten the pages
+  const players = data?.pages?.flatMap((page) => page.list) ?? [];
+
+  console.log("Raw data from query:", data); // Add this for debugging
+  console.log("Processed players:", players); // Add this for debugging
+
+  return {
+    players,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   };
-
-  return [players, dispatchPlayers, fetchMorePlayers];
 };
-
-export { usePlayers, playersReducer };

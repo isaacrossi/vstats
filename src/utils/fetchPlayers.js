@@ -1,25 +1,20 @@
 import { apiOptions } from "../config/apiOptions";
-import axios from "axios";
+// import axios from "axios";
 import { getPlayersUrl } from "../config/apiUrls";
 
-export const fetchPlayers = async (page, searchTerm, teamId, dispatch) => {
-  dispatch({ type: "PLAYERS_FETCH_INIT" });
+export const fetchPlayers = async (page, searchTerm, teamId) => {
+  const url = getPlayersUrl(searchTerm, teamId, page);
+  const result = await fetch(url, apiOptions);
 
-  try {
-    const url = getPlayersUrl(searchTerm, teamId, page);
-    console.log("Fetching players with URL:", url); // Log the URL
-    const result = await axios.get(url, apiOptions);
-    console.log("API response:", result.data); // Log the API response
-    dispatch({
-      type: "PLAYERS_FETCH_SUCCESS",
-      payload: {
-        list: result.data.response,
-        page: result.data.paging.current,
-        totalPage: result.data.paging.total,
-      },
-    });
-  } catch (error) {
-    console.error("API fetch error:", error); // Log any errors
-    dispatch({ type: "PLAYERS_FETCH_FAILURE" });
+  if (!result.ok) {
+    throw new Error(`players fetch not ok`);
   }
+
+  const data = await result.json(); // Make sure to parse the JSON response
+
+  return {
+    list: data.response, // Make sure this matches your API response
+    page: data.paging.current,
+    totalPage: data.paging.total,
+  };
 };

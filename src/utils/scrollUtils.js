@@ -1,35 +1,23 @@
 import { debounce } from "lodash";
 
-// Function to check if the user has scrolled to the bottom
-const checkScrollPosition = debounce(
-  (callback, list, setHasReachedBottom, hasReachedBottom) => {
-    const buffer = 100; // Buffer to trigger early
-    const viewportHeight = window.innerHeight;
-    const scrollY = window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-    const isScrollNearEnd = viewportHeight + scrollY + buffer >= documentHeight;
-
-    if (isScrollNearEnd && !list.isLoading && !hasReachedBottom) {
-      console.log("Reached bottom, fetching more players...");
-      setHasReachedBottom(true); // Prevent further fetches
-      callback();
-    }
-  },
-  500
-);
-
 export const monitorScrollForInfiniteFetching = (
-  callback,
-  list,
-  setHasReachedBottom,
-  hasReachedBottom
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage
 ) => {
-  const scrollListener = () => {
-    checkScrollPosition(callback, list, setHasReachedBottom, hasReachedBottom);
-  };
-  window.addEventListener("scroll", scrollListener);
+  const handleScroll = debounce(() => {
+    const buffer = 100;
+    const isNearBottom =
+      window.scrollY >= document.documentElement.scrollHeight - buffer;
+
+    if (isNearBottom && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, 500);
+
+  window.addEventListener("scroll", handleScroll);
 
   return () => {
-    window.removeEventListener("scroll", scrollListener);
+    window.removeEventListener("scroll", handleScroll);
   };
 };
