@@ -25,13 +25,8 @@ const PlayerDetails = () => {
 
   const leagueAndPlayedData = useMemo(
     () => findALeagueAndPlayed(player),
-    [player]
+    [player],
   );
-
-  console.log("player data", player)
-  console.log("league and played data", leagueAndPlayedData)
-
-
 
   return (
     <>

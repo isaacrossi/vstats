@@ -29,6 +29,7 @@ const HeaderWithDetails = ({ statData, playerData }) => (
                 countries[playerData?.player?.nationality]
               }/flat/64.png`}
               imgAlt={`${playerData?.player?.nationality} flag`}
+              statData={statData}
             >
               {playerData?.player?.nationality}
             </ListItemWithImage>
@@ -36,9 +37,10 @@ const HeaderWithDetails = ({ statData, playerData }) => (
               title="Team"
               imgSrc={statData?.team?.logo}
               imgAlt={`${statData?.team?.name} logo`}
+              statData={statData}
             >
               {statData === undefined ? (
-                <p className="text-sm lg:text-base font-medium uppercase text-slate-50 md:py-0.5 lg:py-0">
+                <p className="text-sm lg:text-base font-medium uppercase text-slate-50">
                   No A-League Team
                 </p>
               ) : (
@@ -102,7 +104,7 @@ const ListItemWithImage = ({ title, imgSrc, imgAlt, children, statData }) => (
     </span>
     <div className="flex items-center">
       <img
-        className={`w-6 h-6 mr-2" ${statData === undefined ? "hidden" : "block"}`}
+        className={`w-6 h-6 mr-2 ${statData === undefined ? "hidden" : "block"}`}
         src={imgSrc}
         alt={imgAlt}
       />
