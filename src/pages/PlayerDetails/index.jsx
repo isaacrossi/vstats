@@ -28,6 +28,11 @@ const PlayerDetails = () => {
     [player]
   );
 
+  console.log("player data", player)
+  console.log("league and played data", leagueAndPlayedData)
+
+
+
   return (
     <>
       {isLoading ? (

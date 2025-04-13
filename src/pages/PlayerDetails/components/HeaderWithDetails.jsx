@@ -3,7 +3,7 @@ import { cmToFeetAndInches } from "../../../utils/cmToFeetAndInches";
 import { Header } from "../../../shared/components/Header";
 
 const HeaderWithDetails = ({ statData, playerData }) => (
-  <Header className="container mx-auto pt-12 lg:pt-28 pb-14 lg:pb-16 bg-blue-diagonal bg-cover bg-no-repeat">
+  <Header>
     <div className="flex-col-reverse md:flex-row flex justify-between">
       <div className="flex flex-col w-full">
         <h2 className="font-heading text-3xl lg:text-4xl text-slate-50 uppercase mb-1">
@@ -14,7 +14,15 @@ const HeaderWithDetails = ({ statData, playerData }) => (
         </h1>
         <div className="md:grid md:grid-cols-8">
           <ul className="md:col-span-4">
-            <ListItem title="Role">{statData?.games?.position}</ListItem>
+            <ListItem title="Role">
+              {statData?.games?.position === undefined ? (
+                <p className="text-sm lg:text-base font-medium uppercase text-slate-50">
+                  No Role
+                </p>
+              ) : (
+                statData?.games?.position
+              )}
+            </ListItem>
             <ListItemWithImage
               title="Country"
               imgSrc={`https://flagsapi.com/${
@@ -29,7 +37,13 @@ const HeaderWithDetails = ({ statData, playerData }) => (
               imgSrc={statData?.team?.logo}
               imgAlt={`${statData?.team?.name} logo`}
             >
-              {statData?.team?.name}
+              {statData === undefined ? (
+                <p className="text-sm lg:text-base font-medium uppercase text-slate-50 md:py-0.5 lg:py-0">
+                  No A-League Team
+                </p>
+              ) : (
+                statData?.team?.name
+              )}
             </ListItemWithImage>
           </ul>
 
@@ -63,7 +77,7 @@ const ImageWithLogo = ({ playerData, statData }) => (
       alt={`${playerData?.player?.firstname} ${playerData?.player?.lastname}`}
     />
     <img
-      className="absolute max-w-[25%] top-3/4 left-[-5%] shadow-2xl" // adjusts based on container size
+      className={`absolute max-w-[25%] top-3/4 left-[-5%] shadow-2xl ${statData === undefined ? "hidden" : "block"}`}
       src={statData?.team?.logo}
       alt={`${statData?.team?.name} logo`}
     />
@@ -81,13 +95,17 @@ const ListItem = ({ title, children }) => (
   </li>
 );
 
-const ListItemWithImage = ({ title, imgSrc, imgAlt, children }) => (
+const ListItemWithImage = ({ title, imgSrc, imgAlt, children, statData }) => (
   <li className="flex justify-between md:justify-normal md:flex-col mb-6 md:last:mb-0">
     <span className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
     </span>
     <div className="flex items-center">
-      <img className="w-6 h-6 mr-2" src={imgSrc} alt={imgAlt} />
+      <img
+        className={`w-6 h-6 mr-2" ${statData === undefined ? "hidden" : "block"}`}
+        src={imgSrc}
+        alt={imgAlt}
+      />
       <p className="text-sm lg:text-base uppercase font-medium text-slate-50">
         {children}
       </p>
