@@ -60,7 +60,7 @@ const HeaderWithDetails = ({ statData, playerData }) => (
             </ListItem>
             <ListItem title="Birth">
               {playerData?.player?.birth.date
-                ? `${playerData?.player?.birth.date}`
+                ? `${playerData?.player?.birth?.date?.split("-").reverse().join("-")} (${playerData?.player?.age} years old)`
                 : "n/a"}
             </ListItem>
           </ul>
