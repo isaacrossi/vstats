@@ -1,6 +1,5 @@
 import { H2WithSlash } from "../H2WithSlash";
 import { Dropdown } from "../../../../shared/components/Dropdown";
-import { seasons } from "../../../../data/seasons";
 import { StatWithDividers } from "../StatWithDividers";
 import { DoughnutWithCenteredStat } from "../DoughnutWithCenteredStat";
 import { LabelWithIconAndValue } from "../LabelWithIconAndValue";
@@ -11,7 +10,7 @@ import { formatValue } from "../../../../utils/formatValue";
 
 export const GeneralSection = ({
   data,
-  playerSeasons,
+  dropdownData,
   handleDropdownChange,
   selectedItemId,
 }) => {
@@ -21,7 +20,7 @@ export const GeneralSection = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between w-full mb-4 md:mb-6">
           <H2WithSlash title="General" marginBottom={false} hasinput={true} />
           <Dropdown
-            data={playerSeasons || seasons}
+            data={dropdownData}
             title="2024"
             id="league-dropdown"
             hasImage={false}

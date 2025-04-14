@@ -31,7 +31,13 @@ const HeaderWithDetails = ({ statData, playerData }) => (
               imgAlt={`${playerData?.player?.nationality} flag`}
               statData={statData}
             >
-              {playerData?.player?.nationality}
+              {statData === undefined ? (
+                <p className="text-sm lg:text-base font-medium uppercase text-slate-50">
+                  N/A
+                </p>
+              ) : (
+                statData?.player?.nationality
+              )}
             </ListItemWithImage>
             <ListItemWithImage
               title="Team"
