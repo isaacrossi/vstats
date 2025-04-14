@@ -29,21 +29,15 @@ const HeaderWithDetails = ({ statData, playerData }) => (
                 countries[playerData?.player?.nationality]
               }/flat/64.png`}
               imgAlt={`${playerData?.player?.nationality} flag`}
-              statData={statData}
+              data={playerData}
             >
-              {statData === undefined ? (
-                <p className="text-sm lg:text-base font-medium uppercase text-slate-50">
-                  N/A
-                </p>
-              ) : (
-                statData?.player?.nationality
-              )}
+              {playerData?.player?.nationality}
             </ListItemWithImage>
             <ListItemWithImage
               title="Team"
               imgSrc={statData?.team?.logo}
               imgAlt={`${statData?.team?.name} logo`}
-              statData={statData}
+              data={statData}
             >
               {statData === undefined ? (
                 <p className="text-sm lg:text-base font-medium uppercase text-slate-50">
@@ -66,7 +60,7 @@ const HeaderWithDetails = ({ statData, playerData }) => (
             </ListItem>
             <ListItem title="Birth">
               {playerData?.player?.birth.date
-                ? `${playerData?.player?.birth.date} (${playerData?.player?.age} years old)`
+                ? `${playerData?.player?.birth.date}`
                 : "n/a"}
             </ListItem>
           </ul>
@@ -103,14 +97,14 @@ const ListItem = ({ title, children }) => (
   </li>
 );
 
-const ListItemWithImage = ({ title, imgSrc, imgAlt, children, statData }) => (
+const ListItemWithImage = ({ title, imgSrc, imgAlt, children, data }) => (
   <li className="flex justify-between md:justify-normal md:flex-col mb-6 md:last:mb-0">
     <span className="text-sm lg:text-base font-medium text-slate-400 uppercase mb-2">
       {title}
     </span>
     <div className="flex items-center">
       <img
-        className={`w-6 h-6 mr-2 ${statData === undefined ? "hidden" : "block"}`}
+        className={`w-6 h-6 mr-2 ${data === undefined ? "hidden" : "block"}`}
         src={imgSrc}
         alt={imgAlt}
       />
