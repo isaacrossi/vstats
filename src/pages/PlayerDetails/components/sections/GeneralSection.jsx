@@ -7,6 +7,7 @@ import RoyalBlueSlash from "../../../../assets/royal-blue-slash.svg?react";
 import NavyBlueSlash from "../../../../assets/navy-blue-slash.svg?react";
 import { StatsPanel } from "../StatsPanel";
 import { formatValue } from "../../../../utils/formatValue";
+import { Section } from "../../../../shared/components/Section";
 
 export const GeneralSection = ({
   data,
@@ -15,7 +16,7 @@ export const GeneralSection = ({
   selectedItemId,
 }) => {
   return (
-    <section className="container mx-auto relative px-4 pt-10 md:pt-14 pb-14 md:pb-20 flex flex-col-reverse md:flex-col">
+    <Section className="relative flex flex-col-reverse md:flex-col">
       <div>
         <div className="flex flex-col md:flex-row md:items-center justify-between w-full mb-4 md:mb-6">
           <H2WithSlash title="General" marginBottom={false} hasinput={true} />
@@ -65,6 +66,6 @@ export const GeneralSection = ({
       </div>
 
       <StatsPanel data={data} />
-    </section>
+    </Section>
   );
 };

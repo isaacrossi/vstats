@@ -8,9 +8,10 @@ import { calculatePercentage } from "../../../../utils/calculatePercentage";
 import Red600Slash from "../../../../assets/red-600-slash.svg?react";
 import Yellow300Slash from "../../../../assets/yellow-300-slash.svg?react";
 import { formatValue } from "../../../../utils/formatValue";
+import { Section } from "../../../../shared/components/Section";
 
 export const DefenceSection = ({ data }) => (
-  <section className="container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
+  <Section className="container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
     <H2WithSlash title="Defence" />
     <div className="flex flex-col md:flex-row">
       <StatWithDividers statTitle="Tackles" hasSolidBorder={true}>
@@ -95,5 +96,5 @@ export const DefenceSection = ({ data }) => (
         </div>
       </div>
     </div>
-  </section>
+  </Section>
 );

@@ -3,12 +3,22 @@ import { debounce } from "lodash";
 export const monitorScrollForInfiniteFetching = (
   fetchNextPage,
   hasNextPage,
-  isFetchingNextPage
+  isFetchingNextPage,
 ) => {
   const handleScroll = debounce(() => {
     const buffer = 100;
-    const isNearBottom =
-      window.scrollY >= document.documentElement.scrollHeight - buffer;
+    const scrollY = window.scrollY;
+    const innerHeight = window.innerHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+
+    const isNearBottom = innerHeight + scrollY >= scrollHeight - buffer;
+
+    console.log(
+      `scrollY: ${scrollY}, innerHeight: ${innerHeight}, scrollHeight: ${scrollHeight}, buffer: ${buffer}`,
+    );
+    console.log(
+      `isNearBottom: ${isNearBottom}, hasNextPage: ${hasNextPage}, isFetchingNextPage: ${isFetchingNextPage}`,
+    );
 
     if (isNearBottom && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();

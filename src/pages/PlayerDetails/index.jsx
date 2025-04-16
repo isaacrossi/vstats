@@ -9,6 +9,7 @@ import { AttackSection } from "./components/sections/AttackSection";
 import { DefenceSection } from "./components/sections/DefenceSection";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayerSeasons } from "../../utils/fetchPlayerSeasons";
+import { EmptyState } from "./components/sections/EmptyState";
 
 const PlayerDetails = () => {
   const [selectedSeasonId, setSelectedSeasonId] = useState(2024);
@@ -34,10 +35,20 @@ const PlayerDetails = () => {
     [player],
   );
 
-  const formattedSeasons = playerSeasons?.map((year) => ({
-    id: year,
-    name: year.toString(),
-  }));
+  const reverseAndFilteredPlayerSeasons = playerSeasons
+    ?.slice()
+    .reverse()
+    .filter((year) => year >= 2015 && year <= 2024);
+
+  const seasonsWithId = reverseAndFilteredPlayerSeasons?.map((year) => {
+    const nextYear = (parseInt(year) + 1).toString().slice(-2);
+    return {
+      id: year,
+      name: `${year}/${nextYear}`,
+    };
+  });
+
+  console.log("season", selectedSeasonId);
 
   return (
     <>
@@ -54,14 +65,25 @@ const PlayerDetails = () => {
             />
           </div>
 
-          <GeneralSection
-            data={leagueAndPlayedData}
-            dropdownData={formattedSeasons}
-            handleDropdownChange={handleDropdownChange}
-            selectedItemId={selectedSeasonId}
-          />
-          <AttackSection data={leagueAndPlayedData} />
-          <DefenceSection data={leagueAndPlayedData} />
+          {leagueAndPlayedData?.games?.appearences === undefined ? (
+            <EmptyState
+              dropdownData={seasonsWithId || []}
+              handleDropdownChange={handleDropdownChange}
+              selectedItemId={selectedSeasonId}
+              name={player?.player?.name}
+            />
+          ) : (
+            <>
+              <GeneralSection
+                data={leagueAndPlayedData}
+                dropdownData={seasonsWithId || []}
+                handleDropdownChange={handleDropdownChange}
+                selectedItemId={selectedSeasonId}
+              />
+              <AttackSection data={leagueAndPlayedData} />
+              <DefenceSection data={leagueAndPlayedData} />
+            </>
+          )}
         </>
       )}
     </>

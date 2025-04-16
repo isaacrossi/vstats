@@ -6,6 +6,7 @@ import { teams } from "../../data/teams";
 import { monitorScrollForInfiniteFetching } from "../../utils/scrollUtils";
 import { usePlayers } from "../../hooks/usePlayers";
 import { Header } from "../../shared/components/Header";
+import { Section } from "../../shared/components/Section";
 
 export const Players = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,7 +26,7 @@ export const Players = () => {
     monitorScrollForInfiniteFetching(
       fetchNextPage,
       hasNextPage,
-      isFetchingNextPage
+      isFetchingNextPage,
     );
   }, [hasNextPage, isFetchingNextPage]);
 
@@ -84,14 +85,14 @@ export const Players = () => {
         </Header>
       </div>
       {isError && <p className="text-slate-50">Something went wrong...</p>}
-      <div className="xl:container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
+      <Section className="container mx-auto px-4 pt-10 md:pt-14 pb-14 md:pb-20">
         <Table
           list={players}
           searchTerm={searchTerm}
           submittedSearchTerm={submittedSearchTerm}
         />
         {isLoading && <p className="text-slate-50">Loading....</p>}
-      </div>
+      </Section>
     </div>
   );
 };

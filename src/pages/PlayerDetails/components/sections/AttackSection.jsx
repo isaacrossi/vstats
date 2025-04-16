@@ -6,9 +6,10 @@ import Blue500Slash from "../../../../assets/blue-500-slash.svg?react";
 import Blue300Slash from "../../../../assets/blue-300-slash.svg?react";
 import { calculatePercentage } from "../../../../utils/calculatePercentage";
 import { formatValue } from "../../../../utils/formatValue";
+import { Section } from "../../../../shared/components/Section";
 
 export const AttackSection = ({ data }) => (
-  <section className="bg-blue-1000 px-4 pt-10 md:pt-14 pb-14 md:pb-20">
+  <Section className="bg-blue-1000" hasContainer={false}>
     <div className="container mx-auto">
       <H2WithSlash title="Attack" textColour="text-slate-50" />
       <div className="flex flex-col md:flex-row">
@@ -80,7 +81,7 @@ export const AttackSection = ({ data }) => (
             centeredData={
               calculatePercentage(
                 data?.dribbles?.success,
-                data?.dribbles?.attempts
+                data?.dribbles?.attempts,
               ) + "%"
             }
             statText="Dribble Success"
@@ -116,5 +117,5 @@ export const AttackSection = ({ data }) => (
         </div>
       </div>
     </div>
-  </section>
+  </Section>
 );
